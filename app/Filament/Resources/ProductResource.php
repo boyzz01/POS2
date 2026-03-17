@@ -46,6 +46,8 @@ class ProductResource extends Resource
                             ->label('Foto Produk')
                             ->image()
                             ->imageEditor()
+                            ->disk('public')
+                            ->visibility('public')
                             ->directory('products')
                             ->maxSize(2048)
                             ->columnSpanFull(),
@@ -131,6 +133,7 @@ class ProductResource extends Resource
             ->columns([
                 ImageColumn::make('foto')
                     ->label('Foto')
+                    ->disk('public')
                     ->circular()
                     ->defaultImageUrl(fn () => 'https://ui-avatars.com/api/?name=P&color=7F9CF5&background=EBF4FF'),
 

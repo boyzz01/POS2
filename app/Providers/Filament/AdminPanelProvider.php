@@ -9,6 +9,7 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
+use Filament\Support\Assets\Css;
 use Filament\Support\Colors\Color;
 use Filament\Widgets\AccountWidget;
 use Filament\Widgets\FilamentInfoWidget;
@@ -21,6 +22,12 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
 {
+    private function getViteAsset(string $entry): string
+    {
+        $manifest = json_decode(file_get_contents(public_path('build/manifest.json')), true);
+        return 'build/' . ($manifest[$entry]['file'] ?? 'assets/app.css');
+    }
+
     public function panel(Panel $panel): Panel
     {
         return $panel
@@ -30,6 +37,9 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->colors([
                 'primary' => Color::Amber,
+            ])
+            ->assets([
+                Css::make('app-css', public_path($this->getViteAsset('resources/css/app.css'))),
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
