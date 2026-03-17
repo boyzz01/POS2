@@ -6,11 +6,14 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use App\Filament\Pages\GantiPassword;
+use Filament\Navigation\MenuItem;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Assets\Css;
 use Filament\Support\Colors\Color;
+use Filament\Support\Icons\Heroicon;
 use App\Filament\Widgets\DashboardStatsWidget;
 use App\Filament\Widgets\KeuanganBulanIniWidget;
 use App\Filament\Widgets\TransaksiTerbaruWidget;
@@ -42,6 +45,12 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->assets([
                 Css::make('app-css', public_path($this->getViteAsset('resources/css/app.css'))),
+            ])
+            ->userMenuItems([
+                MenuItem::make()
+                    ->label('Ganti Password')
+                    ->icon(Heroicon::OutlinedLockClosed)
+                    ->url(fn () => GantiPassword::getUrl()),
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
