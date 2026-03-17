@@ -4,19 +4,17 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProductResource\Pages;
 use App\Models\Product;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Forms\Components\FileUpload;
-use App\Models\Gudang;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
-use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -26,13 +24,13 @@ class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
 
-    protected static \BackedEnum|string|null $navigationIcon = Heroicon::OutlinedArchiveBox;
+    protected static \BackedEnum|string|null $navigationIcon = Heroicon::OutlinedTag;
 
-    protected static ?string $navigationLabel = 'Barang Masuk';
+    protected static ?string $navigationLabel = 'Produk';
 
-    protected static ?string $modelLabel = 'Barang';
+    protected static ?string $modelLabel = 'Produk';
 
-    protected static ?string $pluralModelLabel = 'Data Barang';
+    protected static ?string $pluralModelLabel = 'Katalog Produk';
 
     protected static ?int $navigationSort = 1;
 
@@ -53,10 +51,10 @@ class ProductResource extends Resource
                             ->columnSpanFull(),
                     ]),
 
-                Section::make('Informasi Barang')
+                Section::make('Informasi Produk')
                     ->schema([
                         TextInput::make('merk')
-                            ->label('Merk')
+                            ->label('Merk / Nama Produk')
                             ->required()
                             ->maxLength(255)
                             ->placeholder('Contoh: Frisian Flag'),
@@ -81,49 +79,15 @@ class ProductResource extends Resource
                             ->numeric()
                             ->minValue(0)
                             ->prefix('Rp')
-                            ->placeholder('Contoh: 180.000'),
-
-                        TextInput::make('supplier')
-                            ->label('Supplier')
-                            ->maxLength(255)
-                            ->placeholder('Nama supplier'),
-
-                        Select::make('gudang_id')
-                            ->label('Gudang')
-                            ->relationship('gudang', 'nama')
-                            ->options(fn () => Gudang::where('aktif', true)->pluck('nama', 'id'))
-                            ->searchable()
-                            ->preload()
-                            ->required()
-                            ->native(false)
-                            ->placeholder('Pilih gudang'),
-                    ])
-                    ->columns(2),
-
-                Section::make('Jumlah Masuk')
-                    ->schema([
-                        TextInput::make('jumlah_masuk')
-                            ->label('Jumlah Barang Masuk')
-                            ->required()
-                            ->numeric()
-                            ->minValue(0)
-                            ->suffix('karton')
-                            ->placeholder('Contoh: 1000')
-                            ->live(onBlur: true)
-                            ->helperText(function ($get) {
-                                $pcs = (int) $get('pcs_per_karton');
-                                $karton = (int) $get('jumlah_masuk');
-                                if ($pcs > 0 && $karton > 0) {
-                                    return 'Total: ' . number_format($pcs * $karton) . ' pcs';
-                                }
-                                return 'Isi Pcs/Karton terlebih dahulu untuk melihat total pcs';
-                            }),
+                            ->placeholder('Contoh: 180000'),
 
                         Textarea::make('keterangan')
                             ->label('Keterangan')
                             ->rows(3)
+                            ->columnSpanFull()
                             ->placeholder('Keterangan tambahan (opsional)'),
-                    ]),
+                    ])
+                    ->columns(2),
             ]);
     }
 
@@ -162,62 +126,26 @@ class ProductResource extends Resource
                     ->color('warning')
                     ->weight('bold'),
 
-                TextColumn::make('jumlah_masuk')
-                    ->label('Jumlah Masuk')
-                    ->numeric()
+                TextColumn::make('stok_karton')
+                    ->label('Stok')
+                    ->getStateUsing(fn (Product $record) => $record->stok_karton)
                     ->suffix(' karton')
-                    ->alignCenter()
-                    ->sortable(),
-
-                TextColumn::make('total_pcs')
-                    ->label('Total Pcs')
-                    ->getStateUsing(fn (Product $record) => $record->jumlah_masuk * $record->pcs_per_karton)
-                    ->numeric()
-                    ->suffix(' pcs')
                     ->alignCenter()
                     ->color('success')
                     ->weight('bold'),
 
-                TextColumn::make('supplier')
-                    ->label('Supplier')
-                    ->searchable()
-                    ->toggleable(),
-
-                TextColumn::make('gudang.nama')
-                    ->label('Gudang')
-                    ->badge()
-                    ->color('success')
-                    ->searchable()
-                    ->sortable(),
-
                 TextColumn::make('created_at')
-                    ->label('Tanggal Input')
-                    ->dateTime('d M Y, H:i')
+                    ->label('Ditambahkan')
+                    ->dateTime('d M Y')
                     ->sortable()
                     ->toggleable(),
             ])
-            ->defaultSort('created_at', 'desc')
+            ->defaultSort('merk')
             ->filters([
-                SelectFilter::make('merk')
-                    ->label('Filter Merk')
-                    ->options(fn () => Product::query()->distinct()->pluck('merk', 'merk')->toArray())
-                    ->searchable(),
-
                 SelectFilter::make('ukuran')
-                    ->label('Filter Ukuran')
+                    ->label('Ukuran')
                     ->options(fn () => Product::query()->distinct()->pluck('ukuran', 'ukuran')->toArray())
                     ->searchable(),
-
-                SelectFilter::make('supplier')
-                    ->label('Filter Supplier')
-                    ->options(fn () => Product::query()->whereNotNull('supplier')->distinct()->pluck('supplier', 'supplier')->toArray())
-                    ->searchable(),
-
-                SelectFilter::make('gudang_id')
-                    ->label('Filter Gudang')
-                    ->relationship('gudang', 'nama')
-                    ->searchable()
-                    ->preload(),
             ])
             ->recordActions([
                 ViewAction::make(),
@@ -228,9 +156,9 @@ class ProductResource extends Resource
                     DeleteBulkAction::make(),
                 ]),
             ])
-            ->emptyStateHeading('Belum ada data barang')
-            ->emptyStateDescription('Klik tombol "Tambah Barang" untuk menginput barang masuk pertama.')
-            ->emptyStateIcon(Heroicon::OutlinedArchiveBox);
+            ->emptyStateHeading('Belum ada produk')
+            ->emptyStateDescription('Klik tombol "Tambah Produk" untuk menambah produk ke katalog.')
+            ->emptyStateIcon(Heroicon::OutlinedTag);
     }
 
     public static function getRelations(): array

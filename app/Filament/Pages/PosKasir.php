@@ -60,7 +60,18 @@ class PosKasir extends Page
         $product = Product::find($productId);
         if (! $product) return;
 
-        $key = (string) $productId;
+        $key           = (string) $productId;
+        $jumlahDiCart  = isset($this->cart[$key]) ? $this->cart[$key]['jumlah'] : 0;
+        $stok          = $product->stok_karton;
+
+        if ($jumlahDiCart >= $stok) {
+            Notification::make()
+                ->title('Stok tidak cukup!')
+                ->body("Stok {$product->merk} hanya {$stok} karton.")
+                ->warning()
+                ->send();
+            return;
+        }
 
         if (isset($this->cart[$key])) {
             $this->cart[$key]['jumlah']++;
@@ -72,6 +83,7 @@ class PosKasir extends Page
                 'nama_produk'  => $product->merk,
                 'ukuran'       => $product->ukuran,
                 'harga_karton' => $product->harga_karton,
+                'stok'         => $stok,
                 'jumlah'       => 1,
                 'subtotal'     => $product->harga_karton,
             ];
@@ -83,6 +95,17 @@ class PosKasir extends Page
     public function incrementQty(string $key): void
     {
         if (! isset($this->cart[$key])) return;
+
+        $stok = $this->cart[$key]['stok'] ?? PHP_INT_MAX;
+        if ($this->cart[$key]['jumlah'] >= $stok) {
+            Notification::make()
+                ->title('Stok tidak cukup!')
+                ->body('Jumlah melebihi stok tersedia.')
+                ->warning()
+                ->send();
+            return;
+        }
+
         $this->cart[$key]['jumlah']++;
         $this->cart[$key]['subtotal'] = $this->cart[$key]['jumlah'] * $this->cart[$key]['harga_karton'];
         $this->cart = $this->cart;
@@ -159,6 +182,19 @@ class PosKasir extends Page
                 ->danger()
                 ->send();
             return;
+        }
+
+        // Validasi stok sebelum proses
+        foreach ($this->cart as $item) {
+            $product = Product::find($item['product_id']);
+            if ($product && $product->stok_karton < $item['jumlah']) {
+                Notification::make()
+                    ->title('Stok tidak cukup!')
+                    ->body("Stok {$product->merk} hanya {$product->stok_karton} karton, diminta {$item['jumlah']} karton.")
+                    ->danger()
+                    ->send();
+                return;
+            }
         }
 
         $transaksi = Transaksi::create([

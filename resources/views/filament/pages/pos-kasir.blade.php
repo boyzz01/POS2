@@ -1198,7 +1198,7 @@
                                 <div class="pos-card-footer">
                                     <span class="pos-card-price">Rp
                                         {{ number_format($product->harga_karton, 0, ',', '.') }}</span>
-                                    <span class="pos-card-stock">Stok {{ $product->jumlah_masuk }}</span>
+                                    <span class="pos-card-stock">Stok {{ $product->stok_karton }} krt</span>
                                 </div>
                             </div>
                         </div>
