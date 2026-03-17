@@ -73,6 +73,14 @@ class ProductResource extends Resource
                             ->suffix('pcs')
                             ->placeholder('Contoh: 36'),
 
+                        TextInput::make('harga_karton')
+                            ->label('Harga / Karton')
+                            ->required()
+                            ->numeric()
+                            ->minValue(0)
+                            ->prefix('Rp')
+                            ->placeholder('Contoh: 180.000'),
+
                         TextInput::make('supplier')
                             ->label('Supplier')
                             ->maxLength(255)
@@ -143,6 +151,13 @@ class ProductResource extends Resource
                     ->numeric()
                     ->suffix(' pcs')
                     ->alignCenter(),
+
+                TextColumn::make('harga_karton')
+                    ->label('Harga/Karton')
+                    ->money('IDR')
+                    ->sortable()
+                    ->color('warning')
+                    ->weight('bold'),
 
                 TextColumn::make('jumlah_masuk')
                     ->label('Jumlah Masuk')

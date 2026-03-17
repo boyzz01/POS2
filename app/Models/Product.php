@@ -11,6 +11,7 @@ class Product extends Model
         'merk',
         'ukuran',
         'pcs_per_karton',
+        'harga_karton',
         'jumlah_masuk',
         'supplier',
         'gudang_id',
