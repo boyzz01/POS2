@@ -5,6 +5,8 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ProductResource\Pages;
 use App\Models\Product;
 use Filament\Forms\Components\FileUpload;
+use App\Models\Gudang;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
@@ -75,6 +77,16 @@ class ProductResource extends Resource
                             ->label('Supplier')
                             ->maxLength(255)
                             ->placeholder('Nama supplier'),
+
+                        Select::make('gudang_id')
+                            ->label('Gudang')
+                            ->relationship('gudang', 'nama')
+                            ->options(fn () => Gudang::where('aktif', true)->pluck('nama', 'id'))
+                            ->searchable()
+                            ->preload()
+                            ->required()
+                            ->native(false)
+                            ->placeholder('Pilih gudang'),
                     ])
                     ->columns(2),
 
@@ -153,6 +165,13 @@ class ProductResource extends Resource
                     ->searchable()
                     ->toggleable(),
 
+                TextColumn::make('gudang.nama')
+                    ->label('Gudang')
+                    ->badge()
+                    ->color('success')
+                    ->searchable()
+                    ->sortable(),
+
                 TextColumn::make('created_at')
                     ->label('Tanggal Input')
                     ->dateTime('d M Y, H:i')
@@ -175,6 +194,12 @@ class ProductResource extends Resource
                     ->label('Filter Supplier')
                     ->options(fn () => Product::query()->whereNotNull('supplier')->distinct()->pluck('supplier', 'supplier')->toArray())
                     ->searchable(),
+
+                SelectFilter::make('gudang_id')
+                    ->label('Filter Gudang')
+                    ->relationship('gudang', 'nama')
+                    ->searchable()
+                    ->preload(),
             ])
             ->recordActions([
                 ViewAction::make(),

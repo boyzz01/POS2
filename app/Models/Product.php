@@ -13,6 +13,7 @@ class Product extends Model
         'pcs_per_karton',
         'jumlah_masuk',
         'supplier',
+        'gudang_id',
         'keterangan',
     ];
 
@@ -21,5 +22,10 @@ class Product extends Model
     public function getTotalPcsAttribute(): int
     {
         return ($this->jumlah_masuk ?? 0) * ($this->pcs_per_karton ?? 0);
+    }
+
+    public function gudang()
+    {
+        return $this->belongsTo(Gudang::class);
     }
 }
