@@ -14,6 +14,8 @@ use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Grid;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -104,10 +106,60 @@ class KeuanganResource extends Resource
                         FileUpload::make('bukti')
                             ->label('Upload Bukti / Nota')
                             ->image()
+                            ->disk('public')
                             ->directory('keuangan/bukti')
                             ->maxSize(2048)
                             ->columnSpanFull(),
                     ]),
+
+                Section::make('Pengingat Pengembalian')
+                    ->description('Aktifkan untuk mendapatkan reminder ketika uang investor harus dikembalikan.')
+                    ->icon(Heroicon::OutlinedBell)
+                    ->schema([
+                        Toggle::make('reminder_aktif')
+                            ->label('Set Reminder')
+                            ->helperText('Aktifkan untuk mengatur pengingat pengembalian dana')
+                            ->live()
+                            ->afterStateUpdated(function ($state, $set, $get) {
+                                if (! $state) {
+                                    $set('reminder_hari', null);
+                                    $set('reminder_tanggal', null);
+                                }
+                            }),
+
+                        Grid::make(2)
+                            ->schema([
+                                TextInput::make('reminder_hari')
+                                    ->label('Ingatkan dalam (hari)')
+                                    ->numeric()
+                                    ->minValue(1)
+                                    ->suffix('hari')
+                                    ->placeholder('Contoh: 30')
+                                    ->helperText('Dihitung dari tanggal transaksi')
+                                    ->live(debounce: 500)
+                                    ->afterStateUpdated(function ($state, $set, $get) {
+                                        $tanggal = $get('tanggal');
+                                        if ($state && $tanggal) {
+                                            $set('reminder_tanggal', \Carbon\Carbon::parse($tanggal)->addDays((int) $state)->toDateString());
+                                        }
+                                    }),
+
+                                DatePicker::make('reminder_tanggal')
+                                    ->label('Tanggal Reminder')
+                                    ->native(false)
+                                    ->displayFormat('d M Y')
+                                    ->helperText('Otomatis terisi, atau pilih manual')
+                                    ->readOnly(),
+                            ])
+                            ->visible(fn ($get) => (bool) $get('reminder_aktif')),
+
+                        Toggle::make('reminder_selesai')
+                            ->label('Tandai Selesai')
+                            ->helperText('Centang jika dana sudah dikembalikan')
+                            ->visible(fn ($get) => (bool) $get('reminder_aktif')),
+                    ])
+                    ->visible(fn ($get) => $get('jenis') === 'pemasukan')
+                    ->collapsible(),
             ]);
     }
 
@@ -160,6 +212,20 @@ class KeuanganResource extends Resource
                 ImageColumn::make('bukti')
                     ->label('Bukti')
                     ->circular()
+                    ->toggleable(),
+
+                IconColumn::make('reminder_aktif')
+                    ->label('Reminder')
+                    ->boolean()
+                    ->trueIcon(Heroicon::OutlinedBell)
+                    ->falseIcon(Heroicon::OutlinedBellSlash)
+                    ->trueColor('warning')
+                    ->falseColor('gray')
+                    ->tooltip(fn ($record) => $record->reminder_aktif
+                        ? ($record->reminder_selesai
+                            ? 'Selesai'
+                            : 'Reminder: ' . ($record->reminder_tanggal?->format('d M Y') ?? '-'))
+                        : 'Tidak ada reminder')
                     ->toggleable(),
 
                 TextColumn::make('user.name')

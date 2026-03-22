@@ -16,7 +16,9 @@ use Filament\Support\Colors\Color;
 use Filament\Support\Icons\Heroicon;
 use App\Filament\Widgets\DashboardStatsWidget;
 use App\Filament\Widgets\KeuanganBulanIniWidget;
+use App\Filament\Widgets\ReminderKeuanganWidget;
 use App\Filament\Widgets\TransaksiTerbaruWidget;
+use Illuminate\Support\HtmlString;
 use Filament\Widgets\AccountWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -47,7 +49,10 @@ class AdminPanelProvider extends PanelProvider
                 Css::make('app-css', public_path($this->getViteAsset('resources/css/app.css'))),
             ])
             ->sidebarCollapsibleOnDesktop()
-            ->renderHook('panels::body.end', fn () => new \Illuminate\Support\HtmlString('
+            ->renderHook('panels::page.start', fn () => auth()->check()
+                ? new HtmlString(view('filament.components.reminder-banner')->render())
+                : '')
+            ->renderHook('panels::body.end', fn () => new HtmlString('
                 <script>
                     function syncSidebar() {
                         if (!window.Alpine || !Alpine.store("sidebar")) return;
@@ -71,6 +76,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
+                ReminderKeuanganWidget::class,
                 AccountWidget::class,
                 DashboardStatsWidget::class,
                 KeuanganBulanIniWidget::class,
