@@ -46,6 +46,18 @@ class AdminPanelProvider extends PanelProvider
             ->assets([
                 Css::make('app-css', public_path($this->getViteAsset('resources/css/app.css'))),
             ])
+            ->sidebarCollapsibleOnDesktop()
+            ->renderHook('panels::body.end', fn () => new \Illuminate\Support\HtmlString('
+                <script>
+                    function syncSidebar() {
+                        if (!window.Alpine || !Alpine.store("sidebar")) return;
+                        const isPOS = window.location.pathname.includes("pos-kasir");
+                        isPOS ? Alpine.store("sidebar").close() : Alpine.store("sidebar").open();
+                    }
+                    document.addEventListener("DOMContentLoaded", syncSidebar);
+                    document.addEventListener("livewire:navigated", syncSidebar);
+                </script>
+            '))
             ->userMenuItems([
                 MenuItem::make()
                     ->label('Ganti Password')

@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProductResource\Pages;
 use App\Models\Product;
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -152,6 +153,20 @@ class ProductResource extends Resource
                 EditAction::make(),
             ])
             ->toolbarActions([
+                Action::make('exportExcel')
+                    ->label('Export Excel')
+                    ->icon(Heroicon::OutlinedTableCells)
+                    ->color('success')
+                    ->url(route('export.products.excel'))
+                    ->openUrlInNewTab(),
+
+                Action::make('exportPdf')
+                    ->label('Export PDF')
+                    ->icon(Heroicon::OutlinedDocumentText)
+                    ->color('danger')
+                    ->url(route('export.products.pdf'))
+                    ->openUrlInNewTab(),
+
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),

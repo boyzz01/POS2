@@ -94,7 +94,8 @@
             display: flex;
             flex-direction: column;
             background: var(--pos-surface);
-            border-right: 1px solid var(--pos-border);
+            border-left: 1px solid var(--pos-border);
+            order: 2;
         }
 
         @media (min-width: 1440px) {
@@ -584,6 +585,7 @@
             display: flex;
             flex-direction: column;
             background: var(--pos-surface-alt);
+            order: 1;
         }
 
         .pos-top-bar {
