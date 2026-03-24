@@ -14,7 +14,7 @@ class TransaksiTerbaruWidget extends BaseWidget
 
     protected int|string|array $columnSpan = 'full';
 
-    protected static ?string $heading = 'Transaksi POS Terbaru';
+    protected static ?string $heading = 'TransaksiTerbaru';
 
     public ?int $gudangId = null;
 
@@ -31,7 +31,7 @@ class TransaksiTerbaruWidget extends BaseWidget
                 Transaksi::query()
                     ->with(['kasir', 'gudang'])
                     ->where('status', 'selesai')
-                    ->when($this->gudangId, fn ($q) => $q->where('gudang_id', $this->gudangId))
+                    ->when($this->gudangId, fn($q) => $q->where('gudang_id', $this->gudangId))
                     ->latest()
                     ->limit(10)
             )
@@ -54,22 +54,22 @@ class TransaksiTerbaruWidget extends BaseWidget
 
                 TextColumn::make('total_harga')
                     ->label('Total')
-                    ->formatStateUsing(fn ($state) => 'Rp ' . number_format($state, 0, ',', '.'))
+                    ->formatStateUsing(fn($state) => 'Rp ' . number_format($state, 0, ',', '.'))
                     ->weight('bold')
                     ->color('success'),
 
                 TextColumn::make('total_bayar')
                     ->label('Dibayar')
-                    ->formatStateUsing(fn ($state) => 'Rp ' . number_format($state, 0, ',', '.')),
+                    ->formatStateUsing(fn($state) => 'Rp ' . number_format($state, 0, ',', '.')),
 
                 TextColumn::make('kembalian')
                     ->label('Kembalian')
-                    ->formatStateUsing(fn ($state) => 'Rp ' . number_format($state, 0, ',', '.')),
+                    ->formatStateUsing(fn($state) => 'Rp ' . number_format($state, 0, ',', '.')),
 
                 TextColumn::make('status')
                     ->label('Status')
                     ->badge()
-                    ->color(fn (string $state) => match ($state) {
+                    ->color(fn(string $state) => match ($state) {
                         'selesai' => 'success',
                         'batal'   => 'danger',
                         default   => 'gray',

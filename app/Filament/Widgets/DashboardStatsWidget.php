@@ -29,8 +29,8 @@ class DashboardStatsWidget extends BaseWidget
         $tahunLalu  = now()->subMonth()->year;
         $gid        = $this->gudangId;
 
-        $keuangan = fn () => Keuangan::query()->when($gid, fn ($q) => $q->where('gudang_id', $gid));
-        $transaksi = fn () => Transaksi::query()->where('status', 'selesai')->when($gid, fn ($q) => $q->where('gudang_id', $gid));
+        $keuangan = fn() => Keuangan::query()->when($gid, fn($q) => $q->where('gudang_id', $gid));
+        $transaksi = fn() => Transaksi::query()->where('status', 'selesai')->when($gid, fn($q) => $q->where('gudang_id', $gid));
 
         $pemasukanBulanIni   = $keuangan()->where('jenis', 'pemasukan')->whereMonth('tanggal', $bulan)->whereYear('tanggal', $tahun)->sum('jumlah');
         $pemasukanBulanLalu  = $keuangan()->where('jenis', 'pemasukan')->whereMonth('tanggal', $bulanLalu)->whereYear('tanggal', $tahunLalu)->sum('jumlah');
@@ -76,7 +76,7 @@ class DashboardStatsWidget extends BaseWidget
                 ->descriptionIcon('heroicon-m-archive-box')
                 ->color('info'),
 
-            Stat::make('Total Transaksi POS', $transaksi()->count() . ' transaksi')
+            Stat::make('Total Transaksi', $transaksi()->count() . ' transaksi')
                 ->description('Omzet: Rp ' . number_format($transaksi()->sum('total_harga'), 0, ',', '.'))
                 ->descriptionIcon('heroicon-m-shopping-cart')
                 ->color('primary'),
@@ -88,7 +88,7 @@ class DashboardStatsWidget extends BaseWidget
         return collect(range(6, 0))->map(function ($i) {
             $date = now()->subMonths($i);
             return (int) Transaksi::where('status', 'selesai')
-                ->when($this->gudangId, fn ($q) => $q->where('gudang_id', $this->gudangId))
+                ->when($this->gudangId, fn($q) => $q->where('gudang_id', $this->gudangId))
                 ->whereMonth('created_at', $date->month)
                 ->whereYear('created_at', $date->year)
                 ->sum('total_harga');
@@ -100,7 +100,7 @@ class DashboardStatsWidget extends BaseWidget
         return collect(range(6, 0))->map(function ($i) {
             $date = now()->subMonths($i);
             return (int) Keuangan::where('jenis', 'pemasukan')
-                ->when($this->gudangId, fn ($q) => $q->where('gudang_id', $this->gudangId))
+                ->when($this->gudangId, fn($q) => $q->where('gudang_id', $this->gudangId))
                 ->whereMonth('tanggal', $date->month)
                 ->whereYear('tanggal', $date->year)
                 ->sum('jumlah');

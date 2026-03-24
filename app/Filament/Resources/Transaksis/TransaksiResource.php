@@ -20,13 +20,14 @@ class TransaksiResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedShoppingBag;
 
-    protected static ?string $navigationLabel = 'Transaksi POS';
+    protected static ?string $navigationLabel = 'Transaksi';
 
     protected static ?string $modelLabel = 'Transaksi';
 
     protected static ?string $pluralModelLabel = 'Daftar Transaksi';
 
     protected static ?int $navigationSort = 2;
+
 
     protected static ?string $recordTitleAttribute = 'kode_transaksi';
 
