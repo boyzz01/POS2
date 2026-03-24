@@ -8,6 +8,7 @@ class Gudang extends Model
 {
     protected $fillable = [
         'nama',
+        'tipe',
         'kode',
         'lokasi',
         'penanggung_jawab',

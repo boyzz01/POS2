@@ -3,26 +3,35 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Transaksi;
-use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
+use Livewire\Attributes\On;
 
 class TransaksiTerbaruWidget extends BaseWidget
 {
-    protected static ?int $sort = 3;
+    protected static ?int $sort = 4;
 
     protected int|string|array $columnSpan = 'full';
 
     protected static ?string $heading = 'Transaksi POS Terbaru';
+
+    public ?int $gudangId = null;
+
+    #[On('gudang-filter-changed')]
+    public function updateGudang(?int $gudangId): void
+    {
+        $this->gudangId = $gudangId;
+    }
 
     public function table(Table $table): Table
     {
         return $table
             ->query(
                 Transaksi::query()
-                    ->with('kasir')
+                    ->with(['kasir', 'gudang'])
                     ->where('status', 'selesai')
+                    ->when($this->gudangId, fn ($q) => $q->where('gudang_id', $this->gudangId))
                     ->latest()
                     ->limit(10)
             )
@@ -36,6 +45,12 @@ class TransaksiTerbaruWidget extends BaseWidget
                 TextColumn::make('kasir.name')
                     ->label('Kasir')
                     ->searchable(),
+
+                TextColumn::make('gudang.nama')
+                    ->label('Lokasi')
+                    ->badge()
+                    ->color('info')
+                    ->placeholder('-'),
 
                 TextColumn::make('total_harga')
                     ->label('Total')

@@ -23,11 +23,14 @@ class PosKasir extends Page
 
     protected static ?int $navigationSort = 0;
 
-    public string $search      = '';
-    public string $activeTab   = 'semua';
-    public array  $cart        = [];
-    public string $totalBayar  = '';
-    public string $catatan     = '';
+    public string $search            = '';
+    public string $activeTab         = 'semua';
+    public array  $cart              = [];
+    public string $totalBayar        = '';
+    public string $catatan           = '';
+    public string $metodePembayaran  = 'transfer';
+    public string $namaPembeli       = '';
+    public ?int   $gudangId          = null;
 
     public function getGudangsProperty()
     {
@@ -133,9 +136,11 @@ class PosKasir extends Page
 
     public function clearCart(): void
     {
-        $this->cart      = [];
-        $this->totalBayar = '';
-        $this->catatan   = '';
+        $this->cart             = [];
+        $this->totalBayar       = '';
+        $this->catatan          = '';
+        $this->metodePembayaran = 'transfer';
+        $this->namaPembeli      = '';
     }
 
     public function setNominal(int $amount): void
@@ -203,8 +208,11 @@ class PosKasir extends Page
             'total_harga'    => $this->totalHarga,
             'total_bayar'    => $this->bayarInt,
             'kembalian'      => $this->kembalian,
-            'status'         => 'selesai',
-            'catatan'        => $this->catatan ?: null,
+            'gudang_id'          => $this->gudangId ?: null,
+            'status'             => 'selesai',
+            'metode_pembayaran'  => $this->metodePembayaran,
+            'nama_pembeli'       => $this->namaPembeli ?: null,
+            'catatan'            => $this->catatan ?: null,
         ]);
 
         foreach ($this->cart as $item) {

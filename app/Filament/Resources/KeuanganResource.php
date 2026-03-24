@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\KeuanganResource\Pages;
+use App\Models\Gudang;
 use App\Models\Keuangan;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -92,6 +93,18 @@ class KeuanganResource extends Resource
                             ->default(now())
                             ->native(false)
                             ->displayFormat('d M Y'),
+
+                        Select::make('gudang_id')
+                            ->label('Gudang / Toko')
+                            ->required()
+                            ->native(false)
+                            ->options(fn () => Gudang::where('aktif', true)
+                                ->orderByRaw("FIELD(tipe,'toko','gudang')")
+                                ->get()
+                                ->mapWithKeys(fn ($g) => [$g->id => ($g->tipe === 'toko' ? '🏪 ' : '🏭 ') . $g->nama])
+                            )
+                            ->placeholder('Pilih gudang atau toko')
+                            ->columnSpanFull(),
                     ])
                     ->columns(2),
 
@@ -199,6 +212,13 @@ class KeuanganResource extends Resource
                     ->limit(40)
                     ->tooltip(fn ($record) => $record->judul),
 
+                TextColumn::make('gudang.nama')
+                    ->label('Gudang / Toko')
+                    ->badge()
+                    ->color('info')
+                    ->searchable()
+                    ->sortable(),
+
                 TextColumn::make('jumlah')
                     ->label('Jumlah')
                     ->formatStateUsing(function ($state, $record) {
@@ -247,6 +267,11 @@ class KeuanganResource extends Resource
                         'pemasukan'   => 'Pemasukan',
                         'pengeluaran' => 'Pengeluaran',
                     ]),
+
+                SelectFilter::make('gudang_id')
+                    ->label('Gudang / Toko')
+                    ->relationship('gudang', 'nama')
+                    ->native(false),
 
                 SelectFilter::make('kategori')
                     ->label('Kategori')

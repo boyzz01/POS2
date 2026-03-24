@@ -15,6 +15,7 @@ class Keuangan extends Model
         'bukti',
         'keterangan',
         'user_id',
+        'gudang_id',
         'reminder_aktif',
         'reminder_hari',
         'reminder_tanggal',
@@ -63,6 +64,11 @@ class Keuangan extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function gudang()
+    {
+        return $this->belongsTo(Gudang::class);
     }
 
     public function isPemasukan(): bool

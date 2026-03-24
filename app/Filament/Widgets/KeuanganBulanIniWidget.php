@@ -6,21 +6,31 @@ use App\Models\Keuangan;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
+use Livewire\Attributes\On;
 
 class KeuanganBulanIniWidget extends BaseWidget
 {
-    protected static ?int $sort = 2;
+    protected static ?int $sort = 3;
 
     protected int|string|array $columnSpan = 'full';
 
     protected static ?string $heading = 'Transaksi Keuangan Bulan Ini';
+
+    public ?int $gudangId = null;
+
+    #[On('gudang-filter-changed')]
+    public function updateGudang(?int $gudangId): void
+    {
+        $this->gudangId = $gudangId;
+    }
 
     public function table(Table $table): Table
     {
         return $table
             ->query(
                 Keuangan::query()
-                    ->with('user')
+                    ->with(['user', 'gudang'])
+                    ->when($this->gudangId, fn ($q) => $q->where('gudang_id', $this->gudangId))
                     ->whereMonth('tanggal', now()->month)
                     ->whereYear('tanggal', now()->year)
                     ->latest('tanggal')
@@ -46,6 +56,12 @@ class KeuanganBulanIniWidget extends BaseWidget
                     ->label('Kategori')
                     ->badge()
                     ->color('gray'),
+
+                TextColumn::make('gudang.nama')
+                    ->label('Lokasi')
+                    ->badge()
+                    ->color('info')
+                    ->placeholder('-'),
 
                 TextColumn::make('judul')
                     ->label('Keterangan')

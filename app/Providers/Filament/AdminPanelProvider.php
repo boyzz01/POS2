@@ -16,6 +16,7 @@ use Filament\Support\Colors\Color;
 use Filament\Support\Icons\Heroicon;
 use App\Filament\Widgets\DashboardStatsWidget;
 use App\Filament\Widgets\KeuanganBulanIniWidget;
+use App\Filament\Widgets\PerGudangWidget;
 use App\Filament\Widgets\ReminderKeuanganWidget;
 use App\Filament\Widgets\TransaksiTerbaruWidget;
 use Illuminate\Support\HtmlString;
@@ -79,6 +80,7 @@ class AdminPanelProvider extends PanelProvider
                 ReminderKeuanganWidget::class,
                 AccountWidget::class,
                 DashboardStatsWidget::class,
+                PerGudangWidget::class,
                 KeuanganBulanIniWidget::class,
                 TransaksiTerbaruWidget::class,
             ])
