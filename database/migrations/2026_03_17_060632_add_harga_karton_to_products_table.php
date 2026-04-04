@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->unsignedBigInteger('harga_karton')->default(0)->after('harga_satuan')->comment('Harga per karton');
+            $table->unsignedBigInteger('harga_karton')->default(0)->comment('Harga per karton');
         });
     }
 
