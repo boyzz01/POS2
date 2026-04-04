@@ -60,6 +60,11 @@ class ProductResource extends Resource
                             ->maxLength(255)
                             ->placeholder('Contoh: Frisian Flag'),
 
+                        TextInput::make('kategori')
+                            ->label('Kategori')
+                            ->maxLength(100)
+                            ->placeholder('Contoh: Susu, Beras, Minyak'),
+
                         TextInput::make('ukuran')
                             ->label('Ukuran')
                             ->required()
@@ -87,6 +92,15 @@ class ProductResource extends Resource
                             ->rows(3)
                             ->columnSpanFull()
                             ->placeholder('Keterangan tambahan (opsional)'),
+
+                        \Filament\Forms\Components\Toggle::make('is_featured')
+                            ->label('Produk Unggulan')
+                            ->helperText('Tampilkan di landing page'),
+
+                        \Filament\Forms\Components\Toggle::make('is_active')
+                            ->label('Aktif di Katalog')
+                            ->default(true)
+                            ->helperText('Nonaktif = tidak muncul di storefront'),
                     ])
                     ->columns(2),
             ]);
@@ -107,6 +121,13 @@ class ProductResource extends Resource
                     ->searchable()
                     ->sortable()
                     ->weight('bold'),
+
+                TextColumn::make('kategori')
+                    ->label('Kategori')
+                    ->badge()
+                    ->color('success')
+                    ->searchable()
+                    ->toggleable(),
 
                 TextColumn::make('ukuran')
                     ->label('Ukuran')
@@ -134,6 +155,21 @@ class ProductResource extends Resource
                     ->alignCenter()
                     ->color('success')
                     ->weight('bold'),
+
+                \Filament\Tables\Columns\IconColumn::make('is_featured')
+                    ->label('Unggulan')
+                    ->boolean()
+                    ->trueColor('warning')
+                    ->falseColor('gray')
+                    ->alignCenter()
+                    ->toggleable(),
+
+                \Filament\Tables\Columns\IconColumn::make('is_active')
+                    ->label('Aktif')
+                    ->boolean()
+                    ->trueColor('success')
+                    ->falseColor('danger')
+                    ->alignCenter(),
 
                 TextColumn::make('created_at')
                     ->label('Ditambahkan')

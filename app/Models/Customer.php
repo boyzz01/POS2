@@ -2,24 +2,25 @@
 
 namespace App\Models;
 
-use Database\Factories\UserFactory;
+use Database\Factories\CustomerFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-/**
- * Admin users — access Filament panel only.
- * Customers (storefront) are in the Customer model / customers table.
- */
-class User extends Authenticatable
+class Customer extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
+    /** @use HasFactory<CustomerFactory> */
     use HasFactory, Notifiable;
 
     protected $fillable = [
         'name',
         'email',
+        'phone',
         'password',
+        'nama_sppg',
+        'alamat_sppg',
+        'foto_dashboard',
     ];
 
     protected $hidden = [
@@ -33,5 +34,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password'          => 'hashed',
         ];
+    }
+
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
     }
 }
