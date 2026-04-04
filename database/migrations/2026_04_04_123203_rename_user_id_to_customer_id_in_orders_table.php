@@ -11,15 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->renameColumn('user_id', 'customer_id');
-        });
+        // No-op: orders table was created with customer_id directly.
     }
 
     public function down(): void
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->renameColumn('customer_id', 'user_id');
-        });
+        // No-op.
     }
 };
