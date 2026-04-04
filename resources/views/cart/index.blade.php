@@ -17,7 +17,7 @@
         <p class="text-xl font-semibold text-gray-400 mb-2">Keranjang kosong</p>
         <p class="text-gray-400 text-sm mb-6">Tambahkan produk dari katalog kami</p>
         <a href="{{ route('catalog.index') }}"
-           class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-2.5 rounded-lg transition-colors">
+           class="inline-flex items-center gap-2 bg-sky-600 hover:bg-sky-700 text-white font-medium px-6 py-2.5 rounded-lg transition-colors">
             Lihat Katalog
         </a>
     </div>
@@ -27,8 +27,49 @@
 
         {{-- Cart items --}}
         <div class="lg:col-span-2 space-y-4">
+
             @foreach($items as $productId => $item)
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5"
+                 x-data="{
+                     qty: {{ $item['quantity'] }},
+                     price: {{ $item['price'] }},
+                     timer: null,
+                     syncing: false,
+                     token: document.querySelector('meta[name=csrf-token]').content,
+
+                     inc() { this.qty++; this.schedule(); },
+                     dec() { if (this.qty > 0) { this.qty--; this.schedule(); } },
+
+                     schedule() {
+                         clearTimeout(this.timer);
+                         this.timer = setTimeout(() => this.sync(), 600);
+                     },
+
+                     async sync() {
+                         this.syncing = true;
+                         try {
+                             const res = await fetch('/keranjang/set/{{ $item['product_id'] }}', {
+                                 method: 'PATCH',
+                                 headers: { 'X-CSRF-TOKEN': this.token, 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                                 body: JSON.stringify({ quantity: this.qty }),
+                             });
+                             const data = await res.json();
+                             if (!res.ok) return;
+                             if (this.qty <= 0) {
+                                 this.$el.remove();
+                             }
+                             document.querySelector('[data-cart-total]').textContent =
+                                 'Rp ' + data.cartTotal.toLocaleString('id-ID');
+                             document.querySelectorAll('[data-cart-count]').forEach(el => {
+                                 el.textContent = data.cartCount > 99 ? '99+' : data.cartCount;
+                                 el.style.display = data.cartCount > 0 ? '' : 'none';
+                             });
+                             if (data.cartCount === 0) location.reload();
+                         } finally {
+                             this.syncing = false;
+                         }
+                     }
+                 }">
                 <div class="flex gap-4">
                     {{-- Image --}}
                     <div class="w-20 h-20 rounded-lg overflow-hidden bg-gray-100 shrink-0">
@@ -37,8 +78,8 @@
                              alt="{{ $item['name'] }}"
                              class="w-full h-full object-cover">
                         @else
-                        <div class="w-full h-full bg-green-50 flex items-center justify-center">
-                            <svg class="w-8 h-8 text-green-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-full h-full bg-sky-50 flex items-center justify-center">
+                            <svg class="w-8 h-8 text-sky-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                       d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
                             </svg>
@@ -50,7 +91,7 @@
                     <div class="flex-1 min-w-0">
                         <h3 class="font-semibold text-gray-900 truncate">{{ $item['name'] }}</h3>
                         <p class="text-sm text-gray-500">{{ $item['size'] }}</p>
-                        <p class="text-green-700 font-semibold mt-1">
+                        <p class="text-sky-700 font-semibold mt-1">
                             Rp {{ number_format($item['price'], 0, ',', '.') }} / karton
                         </p>
                     </div>
@@ -58,43 +99,38 @@
                     {{-- Actions --}}
                     <div class="flex flex-col items-end gap-3">
                         {{-- Remove --}}
-                        <form method="POST" action="{{ route('cart.remove', $productId) }}">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="text-red-400 hover:text-red-600 transition-colors p-1">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                          d="M6 18L18 6M6 6l12 12"/>
+                        <button type="button" @click="qty = 0; sync()"
+                                class="text-red-400 hover:text-red-600 transition-colors p-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+
+                        {{-- Stepper --}}
+                        <div class="flex items-center border border-gray-200 rounded-lg overflow-hidden">
+                            <button type="button" @click="dec()"
+                                    class="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-50">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
                                 </svg>
                             </button>
-                        </form>
+                            <span class="w-12 text-center text-sm font-semibold h-8 flex items-center justify-center border-x border-gray-200 tabular-nums relative">
+                                <span x-text="qty"></span>
+                                <span x-show="syncing"
+                                      class="absolute -top-1 -right-1 w-2 h-2 bg-amber-400 rounded-full animate-pulse"></span>
+                            </span>
+                            <button type="button" @click="inc()"
+                                    class="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-50">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                </svg>
+                            </button>
+                        </div>
 
-                        {{-- Quantity --}}
-                        <form method="POST" action="{{ route('cart.update', $productId) }}"
-                              x-data="{ qty: {{ $item['quantity'] }} }"
-                              @change.debounce.500ms="$el.submit()">
-                            @csrf
-                            @method('PATCH')
-                            <div class="flex items-center border border-gray-200 rounded-lg overflow-hidden">
-                                <button type="button" @click="qty = Math.max(1, qty - 1); $el.closest('form').submit()"
-                                        class="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-50">
-                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
-                                    </svg>
-                                </button>
-                                <input type="number" name="quantity" x-model="qty"
-                                       min="1" max="999"
-                                       class="w-12 text-center text-sm font-semibold h-8 border-x border-gray-200 focus:outline-none">
-                                <button type="button" @click="qty++; $el.closest('form').submit()"
-                                        class="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-50">
-                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </form>
-
-                        <p class="text-sm font-bold text-gray-900">
+                        {{-- Subtotal reaktif --}}
+                        <p class="text-sm font-bold text-gray-900 tabular-nums"
+                           x-text="'Rp ' + (price * qty).toLocaleString('id-ID')">
                             Rp {{ number_format($item['price'] * $item['quantity'], 0, ',', '.') }}
                         </p>
                     </div>
@@ -132,14 +168,14 @@
                 <div class="border-t border-gray-100 pt-4 mb-6">
                     <div class="flex justify-between font-bold text-gray-900 text-lg">
                         <span>Subtotal</span>
-                        <span class="text-green-700">Rp {{ number_format($total, 0, ',', '.') }}</span>
+                        <span class="text-sky-700" data-cart-total>Rp {{ number_format($total, 0, ',', '.') }}</span>
                     </div>
                     <p class="text-xs text-gray-400 mt-1">*Ongkir ditentukan saat checkout</p>
                 </div>
 
                 @auth('customer')
                 <a href="{{ route('checkout.index') }}"
-                   class="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold py-3.5 rounded-xl transition-colors shadow-md">
+                   class="w-full flex items-center justify-center gap-2 bg-sky-600 hover:bg-sky-700 text-white font-bold py-3.5 rounded-xl transition-colors shadow-md">
                     Lanjut ke Checkout
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
@@ -147,7 +183,7 @@
                 </a>
                 @else
                 <a href="{{ route('login') }}?redirect={{ urlencode(route('checkout.index')) }}"
-                   class="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold py-3.5 rounded-xl transition-colors shadow-md">
+                   class="w-full flex items-center justify-center gap-2 bg-sky-600 hover:bg-sky-700 text-white font-bold py-3.5 rounded-xl transition-colors shadow-md">
                     Login untuk Checkout
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
@@ -155,7 +191,7 @@
                 </a>
                 <p class="text-xs text-gray-400 text-center mt-2">
                     Belum punya akun?
-                    <a href="{{ route('register') }}" class="text-green-600 hover:underline">Daftar gratis</a>
+                    <a href="{{ route('register') }}" class="text-sky-600 hover:underline">Daftar gratis</a>
                 </p>
                 @endauth
             </div>

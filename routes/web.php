@@ -30,6 +30,7 @@ Route::prefix('katalog')->name('catalog.')->group(function () {
 Route::prefix('keranjang')->name('cart.')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('index');
     Route::post('/tambah/{product}', [CartController::class, 'add'])->name('add');
+    Route::patch('/set/{product}', [CartController::class, 'set'])->name('set');
     Route::patch('/update/{productId}', [CartController::class, 'update'])->name('update');
     Route::delete('/hapus/{productId}', [CartController::class, 'remove'])->name('remove');
     Route::delete('/kosongkan', [CartController::class, 'clear'])->name('clear');

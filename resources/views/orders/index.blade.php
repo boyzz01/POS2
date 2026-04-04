@@ -16,7 +16,7 @@
         <p class="text-xl font-semibold text-gray-400 mb-2">Belum ada pesanan</p>
         <p class="text-gray-400 text-sm mb-6">Mulai pesan produk kebutuhan MBG Anda</p>
         <a href="{{ route('catalog.index') }}"
-           class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-2.5 rounded-lg transition-colors">
+           class="inline-flex items-center gap-2 bg-sky-600 hover:bg-sky-700 text-white font-medium px-6 py-2.5 rounded-lg transition-colors">
             Lihat Katalog
         </a>
     </div>
@@ -36,7 +36,7 @@
                         </div>
                         <p class="text-sm text-gray-500">{{ $order->created_at->translatedFormat('d F Y, H:i') }}</p>
                     </div>
-                    <p class="font-bold text-green-700 text-lg shrink-0">
+                    <p class="font-bold text-sky-700 text-lg shrink-0">
                         Rp {{ number_format($order->total, 0, ',', '.') }}
                     </p>
                 </div>
@@ -63,12 +63,12 @@
 
             <div class="border-t border-gray-50 px-5 py-3 flex gap-3 bg-gray-50">
                 <a href="{{ route('orders.show', $order) }}"
-                   class="text-sm font-medium text-gray-600 hover:text-green-600 transition-colors">
+                   class="text-sm font-medium text-gray-600 hover:text-sky-600 transition-colors">
                     Detail
                 </a>
                 @if($order->canUploadProof())
                 <a href="{{ route('orders.payment', $order) }}"
-                   class="text-sm font-semibold text-green-600 hover:text-green-700 transition-colors
+                   class="text-sm font-semibold text-sky-600 hover:text-sky-700 transition-colors
                           {{ $order->status->value === 'rejected' ? 'text-red-600 hover:text-red-700' : '' }}">
                     {{ $order->status->value === 'rejected' ? 'Upload Ulang Bukti' : 'Bayar Sekarang' }}
                 </a>

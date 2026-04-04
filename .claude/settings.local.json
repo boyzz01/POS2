@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python skills/ui-ux-pro-max/scripts/search.py \"B2B supplier food distribution institutional procurement trust\" --design-system -p \"Supplier MBG\" -f markdown)",
+      "Read(//c/Users/Ardi/.claude/**)",
+      "Bash(python src/ui-ux-pro-max/scripts/search.py \"B2B supplier food distribution institutional procurement trust\" --design-system -p \"Supplier MBG\" -f markdown)",
+      "Bash(python src/ui-ux-pro-max/scripts/search.py \"institutional clean food hygiene healthcare trust professional\" --domain color -n 5 -f markdown)",
+      "Bash(python src/ui-ux-pro-max/scripts/search.py \"clean professional trust institutional B2B\" --domain typography -n 5 -f markdown)",
+      "Bash(python src/ui-ux-pro-max/scripts/search.py \"B2B landing institutional trust conversion hero social-proof\" --domain landing -n 5 -f markdown)",
+      "Bash(python src/ui-ux-pro-max/scripts/search.py \"clean institutional modern B2B service\" --domain style -n 4 -f markdown)",
+      "Bash(rtk php:*)",
+      "Bash(rtk npm:*)",
+      "Bash(rtk git:*)"
+    ]
+  }
+}

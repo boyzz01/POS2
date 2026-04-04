@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use Illuminate\Http\Response;
 use Illuminate\View\View;
 
 class OrderController extends Controller
@@ -20,7 +21,7 @@ class OrderController extends Controller
 
     public function show(Order $order): View
     {
-        $this->authorize('view', $order);
+        abort_unless($order->customer_id === auth('customer')->id(), Response::HTTP_FORBIDDEN);
 
         $order->load('items.product', 'paymentProofs');
 
@@ -29,7 +30,7 @@ class OrderController extends Controller
 
     public function payment(Order $order): View
     {
-        $this->authorize('viewPayment', $order);
+        abort_unless($order->customer_id === auth('customer')->id(), Response::HTTP_FORBIDDEN);
 
         $order->load('items', 'latestPaymentProof');
 

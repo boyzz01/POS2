@@ -4,9 +4,21 @@ namespace App\Policies;
 
 use App\Models\Customer;
 use App\Models\Order;
+use App\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 
 class OrderPolicy
 {
+    /** Admins (User model) bypass all checks */
+    public function before(Authenticatable $user, string $ability): ?bool
+    {
+        if ($user instanceof User) {
+            return true;
+        }
+
+        return null; // defer to individual methods for customers
+    }
+
     /** Customer can only view their own orders */
     public function view(Customer $customer, Order $order): bool
     {

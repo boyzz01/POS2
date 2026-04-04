@@ -8,7 +8,7 @@
     {{-- Header --}}
     <div class="flex items-center gap-4 mb-8">
         <a href="{{ route('orders.index') }}"
-           class="p-2 text-gray-500 hover:text-green-600 bg-white rounded-lg shadow-sm border border-gray-100 transition-colors">
+           class="p-2 text-gray-500 hover:text-sky-600 bg-white rounded-lg shadow-sm border border-gray-100 transition-colors">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
             </svg>
@@ -70,7 +70,7 @@
                     @endif
                     <div class="flex justify-between font-bold text-gray-900 text-base">
                         <span>Total</span>
-                        <span class="text-green-700">Rp {{ number_format($order->total, 0, ',', '.') }}</span>
+                        <span class="text-sky-700">Rp {{ number_format($order->total, 0, ',', '.') }}</span>
                     </div>
                 </div>
             </div>
@@ -143,12 +143,12 @@
     <div class="mt-6 flex gap-3">
         @if($order->canUploadProof())
         <a href="{{ route('orders.payment', $order) }}"
-           class="flex-1 text-center px-4 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl transition-colors">
+           class="flex-1 text-center px-4 py-3 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl transition-colors">
             {{ $order->status->value === 'rejected' ? 'Upload Ulang Bukti' : 'Bayar Sekarang' }}
         </a>
         @elseif(in_array($order->status->value, ['awaiting_payment', 'payment_uploaded']))
         <a href="{{ route('orders.payment', $order) }}"
-           class="flex-1 text-center px-4 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl transition-colors">
+           class="flex-1 text-center px-4 py-3 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl transition-colors">
             Halaman Pembayaran
         </a>
         @endif

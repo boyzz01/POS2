@@ -44,20 +44,50 @@ class CartController extends Controller
             : back()->with('success', $message);
     }
 
-    public function update(Request $request, int $productId): RedirectResponse
+    public function set(Request $request, Product $product): JsonResponse
     {
         $request->validate([
-            'quantity' => ['required', 'integer', 'min:0', 'max:999'],
+            'quantity' => ['required', 'integer', 'min:0', 'max:9999'],
+        ]);
+
+        $this->cart->set($product, (int) $request->quantity);
+
+        return response()->json([
+            'quantity'  => $this->cart->getQuantity($product->id),
+            'cartCount' => $this->cart->count(),
+            'cartTotal' => $this->cart->total(),
+        ]);
+    }
+
+    public function update(Request $request, int $productId): RedirectResponse|JsonResponse
+    {
+        $request->validate([
+            'quantity' => ['required', 'integer', 'min:0', 'max:9999'],
         ]);
 
         $this->cart->update($productId, (int) $request->quantity);
 
+        if ($request->expectsJson()) {
+            return response()->json([
+                'quantity'  => $this->cart->getQuantity($productId),
+                'cartCount' => $this->cart->count(),
+                'cartTotal' => $this->cart->total(),
+            ]);
+        }
+
         return back()->with('success', 'Keranjang diperbarui.');
     }
 
-    public function remove(int $productId): RedirectResponse
+    public function remove(int $productId): RedirectResponse|JsonResponse
     {
         $this->cart->remove($productId);
+
+        if (request()->expectsJson()) {
+            return response()->json([
+                'cartCount' => $this->cart->count(),
+                'cartTotal' => $this->cart->total(),
+            ]);
+        }
 
         return back()->with('success', 'Item dihapus dari keranjang.');
     }

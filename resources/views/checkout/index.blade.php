@@ -24,7 +24,7 @@
             {{-- Data pemesan --}}
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                 <h2 class="font-bold text-gray-900 text-lg mb-5 flex items-center gap-2">
-                    <span class="w-7 h-7 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-bold">1</span>
+                    <span class="w-7 h-7 bg-sky-100 text-sky-700 rounded-full flex items-center justify-center text-sm font-bold">1</span>
                     Data Pemesan
                 </h2>
 
@@ -37,7 +37,7 @@
                                value="{{ old('customer_name', $customer->name) }}"
                                required
                                placeholder="Nama lengkap atau nama institusi"
-                               class="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 @error('customer_name') border-red-400 @enderror">
+                               class="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 @error('customer_name') border-red-400 @enderror">
                     </div>
 
                     <div>
@@ -48,7 +48,7 @@
                                value="{{ old('customer_phone', $customer->phone) }}"
                                required
                                placeholder="08xxxxxxxxxx"
-                               class="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 @error('customer_phone') border-red-400 @enderror">
+                               class="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 @error('customer_phone') border-red-400 @enderror">
                     </div>
 
                     <div>
@@ -61,7 +61,7 @@
                                    value="{{ old('shipping_cost', 0) }}"
                                    min="0"
                                    placeholder="0"
-                                   class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+                                   class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
                         </div>
                         <p class="text-xs text-gray-400 mt-1">Kosongkan atau isi 0 jika tidak ada ongkir</p>
                     </div>
@@ -72,7 +72,7 @@
                         </label>
                         <textarea name="customer_address" rows="3" required
                                   placeholder="Alamat lengkap termasuk kota dan kode pos"
-                                  class="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 resize-none @error('customer_address') border-red-400 @enderror">{{ old('customer_address') }}</textarea>
+                                  class="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 resize-none @error('customer_address') border-red-400 @enderror">{{ old('customer_address') }}</textarea>
                     </div>
 
                     <div class="sm:col-span-2">
@@ -81,7 +81,7 @@
                         </label>
                         <textarea name="notes" rows="2"
                                   placeholder="Instruksi khusus, waktu pengiriman yang diinginkan, dll."
-                                  class="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500 resize-none">{{ old('notes') }}</textarea>
+                                  class="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 resize-none">{{ old('notes') }}</textarea>
                     </div>
                 </div>
             </div>
@@ -105,7 +105,7 @@
         <div class="lg:col-span-1">
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-24">
                 <h2 class="font-bold text-gray-900 text-lg mb-5 flex items-center gap-2">
-                    <span class="w-7 h-7 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-bold">2</span>
+                    <span class="w-7 h-7 bg-sky-100 text-sky-700 rounded-full flex items-center justify-center text-sm font-bold">2</span>
                     Ringkasan
                 </h2>
 
@@ -136,7 +136,7 @@
                     </div>
                     <div class="flex justify-between font-bold text-gray-900 text-base pt-2 border-t border-gray-100">
                         <span>Total</span>
-                        <span class="text-green-700"
+                        <span class="text-sky-700"
                               x-text="'Rp ' + ({{ $subtotal }} + shipping).toLocaleString('id-ID')">
                             Rp {{ number_format($subtotal, 0, ',', '.') }}
                         </span>
@@ -144,7 +144,7 @@
                 </div>
 
                 <button type="submit"
-                        class="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold py-3.5 rounded-xl transition-colors shadow-md">
+                        class="w-full flex items-center justify-center gap-2 bg-sky-600 hover:bg-sky-700 text-white font-bold py-3.5 rounded-xl transition-colors shadow-md">
                     Buat Pesanan
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>

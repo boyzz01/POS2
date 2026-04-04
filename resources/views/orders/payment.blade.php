@@ -8,8 +8,8 @@
     {{-- Status indicator --}}
     <div class="text-center mb-8">
         @if($order->status->value === 'paid')
-        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="w-16 h-16 bg-sky-100 rounded-full flex items-center justify-center mx-auto mb-3">
+            <svg class="w-8 h-8 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
             </svg>
         </div>
@@ -53,9 +53,9 @@
 
     {{-- Invoice --}}
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6">
-        <div class="bg-green-600 px-6 py-4 flex items-center justify-between">
+        <div class="bg-sky-600 px-6 py-4 flex items-center justify-between">
             <div>
-                <p class="text-green-100 text-xs font-medium">INVOICE</p>
+                <p class="text-sky-100 text-xs font-medium">INVOICE</p>
                 <p class="text-white font-bold text-xl">{{ $order->invoice_number }}</p>
             </div>
             <span class="px-3 py-1.5 rounded-full text-xs font-semibold {{ $order->status->badgeClass() }}">
@@ -86,7 +86,7 @@
                 @endif
                 <div class="flex justify-between font-bold text-gray-900 text-base pt-2 border-t border-gray-100">
                     <span>TOTAL TRANSFER</span>
-                    <span class="text-green-700 text-lg">Rp {{ number_format($order->total, 0, ',', '.') }}</span>
+                    <span class="text-sky-700 text-lg">Rp {{ number_format($order->total, 0, ',', '.') }}</span>
                 </div>
             </div>
         </div>
@@ -94,9 +94,9 @@
 
     {{-- Bank transfer info --}}
     @if($order->canUploadProof())
-    <div class="bg-green-50 border border-green-200 rounded-2xl p-6 mb-6">
-        <h3 class="font-bold text-green-900 mb-4 flex items-center gap-2">
-            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="bg-sky-50 border border-sky-200 rounded-2xl p-6 mb-6">
+        <h3 class="font-bold text-sky-900 mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
             </svg>
@@ -104,14 +104,14 @@
         </h3>
 
         <div class="space-y-3">
-            <div class="flex items-center justify-between bg-white rounded-xl px-4 py-3 border border-green-100">
+            <div class="flex items-center justify-between bg-white rounded-xl px-4 py-3 border border-sky-100">
                 <div>
                     <p class="text-xs text-gray-400">Bank</p>
                     <p class="font-bold text-gray-900 text-lg">{{ $order->bank_name }}</p>
                 </div>
             </div>
 
-            <div class="flex items-center justify-between bg-white rounded-xl px-4 py-3 border border-green-100"
+            <div class="flex items-center justify-between bg-white rounded-xl px-4 py-3 border border-sky-100"
                  x-data="{ copied: false }">
                 <div>
                     <p class="text-xs text-gray-400">Nomor Rekening</p>
@@ -119,13 +119,13 @@
                 </div>
                 <button type="button"
                         @click="navigator.clipboard.writeText('{{ $order->bank_account }}'); copied = true; setTimeout(() => copied = false, 2000)"
-                        class="text-xs font-medium text-green-600 hover:text-green-800 bg-green-50 hover:bg-green-100 px-3 py-1.5 rounded-lg transition-colors">
+                        class="text-xs font-medium text-sky-600 hover:text-sky-800 bg-sky-50 hover:bg-sky-100 px-3 py-1.5 rounded-lg transition-colors">
                     <span x-show="!copied">Salin</span>
                     <span x-show="copied" class="text-emerald-600">✓ Disalin!</span>
                 </button>
             </div>
 
-            <div class="flex items-center justify-between bg-white rounded-xl px-4 py-3 border border-green-100">
+            <div class="flex items-center justify-between bg-white rounded-xl px-4 py-3 border border-sky-100">
                 <div>
                     <p class="text-xs text-gray-400">Atas Nama</p>
                     <p class="font-bold text-gray-900">{{ $order->bank_holder }}</p>
@@ -179,7 +179,7 @@
                 @dragover.prevent="dragging = true"
                 @dragleave.prevent="dragging = false"
                 @drop.prevent="dragging = false; file = $event.dataTransfer.files[0]; $refs.fileInput.files = $event.dataTransfer.files"
-                :class="dragging ? 'border-green-400 bg-green-50' : 'border-gray-200 hover:border-green-300'"
+                :class="dragging ? 'border-sky-400 bg-sky-50' : 'border-gray-200 hover:border-sky-300'"
                 class="border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-colors"
                 @click="$refs.fileInput.click()">
 
@@ -200,7 +200,7 @@
 
                 <template x-if="file">
                     <div class="flex items-center justify-center gap-3">
-                        <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-8 h-8 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                         </svg>
                         <div class="text-left">
@@ -218,7 +218,7 @@
             </div>
 
             <button type="submit" :disabled="!file"
-                    :class="file ? 'bg-green-600 hover:bg-green-700 cursor-pointer' : 'bg-gray-300 cursor-not-allowed'"
+                    :class="file ? 'bg-sky-600 hover:bg-sky-700 cursor-pointer' : 'bg-gray-300 cursor-not-allowed'"
                     class="w-full mt-4 text-white font-bold py-3 rounded-xl transition-colors flex items-center justify-center gap-2">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -264,7 +264,7 @@
             Detail Pesanan
         </a>
         <a href="{{ route('orders.index') }}"
-           class="flex-1 text-center px-4 py-2.5 bg-white border border-gray-200 hover:border-green-300 hover:text-green-700 text-gray-700 text-sm font-medium rounded-xl transition-colors">
+           class="flex-1 text-center px-4 py-2.5 bg-white border border-gray-200 hover:border-sky-300 hover:text-sky-700 text-gray-700 text-sm font-medium rounded-xl transition-colors">
             Semua Pesanan
         </a>
     </div>

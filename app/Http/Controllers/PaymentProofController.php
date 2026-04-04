@@ -15,7 +15,7 @@ class PaymentProofController extends Controller
 
     public function upload(UploadPaymentProofRequest $request, Order $order): RedirectResponse
     {
-        $this->authorize('uploadProof', $order);
+        abort_unless($order->customer_id === auth('customer')->id(), 403);
 
         $this->service->upload($order, $request->file('proof'));
 
@@ -29,10 +29,8 @@ class PaymentProofController extends Controller
      */
     public function show(Order $order, PaymentProof $proof): StreamedResponse
     {
-        // Ensure the proof belongs to this order
         abort_unless($proof->order_id === $order->id, 404);
-
-        $this->authorize('view', $order);
+        abort_unless($order->customer_id === auth('customer')->id(), 403);
 
         return $this->service->streamProof($proof);
     }
