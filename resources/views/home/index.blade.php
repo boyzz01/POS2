@@ -229,7 +229,7 @@
             </a>
         </div>
 
-        <div class="grid grid-cols-4 gap-3 lg:gap-4">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
             @foreach($featuredProducts->take(4) as $product)
             <x-product-card-sm :product="$product"/>
             @endforeach
