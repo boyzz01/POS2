@@ -77,7 +77,7 @@
     {{-- Info --}}
     <div class="p-4 flex flex-col flex-1">
         @if ($product->kategori)
-            <span class="text-xs font-medium text-sky-600 uppercase tracking-wide mb-1">{{ $product->kategori }}</span>
+            <span class="text-xs font-medium text-sky-600 uppercase tracking-wide mb-1">{{ $product->kategori?->nama }}</span>
         @endif
 
         <a href="{{ route('catalog.show', $product) }}"

@@ -196,6 +196,11 @@ class PosKasir extends Page
             return;
         }
 
+        if (empty(trim($this->namaPembeli))) {
+            Notification::make()->title('Nama pembeli wajib diisi!')->danger()->send();
+            return;
+        }
+
         if ($this->bayarInt < $this->totalHarga) {
             Notification::make()
                 ->title('Pembayaran kurang!')

@@ -15,7 +15,10 @@
       "Bash(composer show:*)",
       "Read(//c/laragon/etc/**)",
       "Read(//c/Windows/System32/drivers/etc/**)",
-      "Read(//c/laragon/www/POS2/app/Providers/**)"
+      "Read(//c/laragon/www/POS2/app/Providers/**)",
+      "Bash(rmdir public/storage)",
+      "Bash(rm public/storage)",
+      "Bash(npm run:*)"
     ]
   }
 }

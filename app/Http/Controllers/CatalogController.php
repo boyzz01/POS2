@@ -18,7 +18,7 @@ class CatalogController extends Controller
                 $q->where('merk', 'like', "%{$search}%")
                   ->orWhere('ukuran', 'like', "%{$search}%")
                   ->orWhere('keterangan', 'like', "%{$search}%")
-                  ->orWhere('kategori', 'like', "%{$search}%");
+                  ->orWhereHas('kategori', fn ($k) => $k->where('nama', 'like', "%{$search}%"));
             });
         }
 
@@ -27,7 +27,7 @@ class CatalogController extends Controller
         }
 
         // Ambil semua produk aktif untuk hitung stok (stok_karton adalah computed attribute)
-        $allProducts = $query->orderBy('kategori')->orderBy('merk')->get();
+        $allProducts = $query->with('kategori')->orderBy('merk')->get();
 
         $tab = $request->input('tab', 'ready');
         $filtered = $tab === 'po'
@@ -48,12 +48,7 @@ class CatalogController extends Controller
             ['path' => $request->url(), 'query' => $request->query()]
         );
 
-        $categories = Product::active()
-            ->whereNotNull('kategori')
-            ->distinct()
-            ->pluck('kategori')
-            ->sort()
-            ->values();
+        $categories = \App\Models\Kategori::orderBy('nama')->pluck('nama', 'id');
 
         return view('catalog.index', compact('products', 'categories', 'tab', 'countReady', 'countPo'));
     }
@@ -64,7 +59,7 @@ class CatalogController extends Controller
 
         $related = Product::active()
             ->where('id', '!=', $product->id)
-            ->when($product->kategori, fn ($q) => $q->where('kategori', $product->kategori))
+            ->when($product->kategori_id, fn ($q) => $q->where('kategori_id', $product->kategori_id))
             ->take(4)
             ->get();
 

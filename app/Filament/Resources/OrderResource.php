@@ -27,6 +27,11 @@ class OrderResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Pesanan Customer';
 
+    public static function canAccess(): bool
+    {
+        return !auth()->user()?->isKasir();
+    }
+
     protected static ?int $navigationSort = 5;
 
     public static function table(Table $table): Table

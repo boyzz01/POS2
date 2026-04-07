@@ -23,7 +23,7 @@
     {{-- Info --}}
     <div class="p-3">
         @if($product->kategori)
-        <span class="text-xs font-medium text-sky-600 uppercase tracking-wide">{{ $product->kategori }}</span>
+        <span class="text-xs font-medium text-sky-600 uppercase tracking-wide">{{ $product->kategori?->nama }}</span>
         @endif
         <p class="text-sm font-semibold text-gray-900 group-hover:text-sky-700 transition-colors line-clamp-2 leading-snug mt-0.5">
             {{ $product->merk }}

@@ -17,6 +17,12 @@ class TransaksisTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(function ($query) {
+                $gudangId = auth()->user()?->activeGudangId();
+                if ($gudangId) {
+                    $query->where('gudang_id', $gudangId);
+                }
+            })
             ->columns([
                 TextColumn::make('kode_transaksi')
                     ->label('Kode Transaksi')

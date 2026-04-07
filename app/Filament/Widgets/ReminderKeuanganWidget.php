@@ -25,6 +25,10 @@ class ReminderKeuanganWidget extends Widget
 
     public static function canView(): bool
     {
+        if (! auth()->user()?->isSuperAdmin()) {
+            return false;
+        }
+
         return Keuangan::where('jenis', 'pemasukan')
             ->where('reminder_aktif', true)
             ->where('reminder_selesai', false)

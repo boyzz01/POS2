@@ -1085,8 +1085,8 @@
                 </div>
 
                 {{-- Nama Pembeli --}}
-                <input type="text" wire:model.live="namaPembeli" placeholder="Nama pembeli (opsional)..."
-                    class="pos-note-input" style="margin-bottom:6px;" />
+                <input type="text" wire:model.live="namaPembeli" placeholder="Nama pembeli (wajib)..."
+                    class="pos-note-input" style="margin-bottom:6px;" required />
 
                 {{-- Notes --}}
                 <input type="text" wire:model.live="catatan" placeholder="Catatan transaksi (opsional)..."
@@ -1157,16 +1157,18 @@
 
                 {{-- Tabs --}}
                 <div class="pos-tabs">
-                    <button wire:click="setTab('semua')"
-                        class="pos-tab {{ $activeTab === 'semua' ? 'all' : 'inactive' }}">
-                        Semua Produk
-                    </button>
-                    @foreach ($this->gudangs as $gudang)
-                        <button wire:click="setTab('{{ $gudang->nama }}')"
-                            class="pos-tab {{ $activeTab === $gudang->nama ? 'gudang-a' : 'inactive' }}">
-                            {{ $gudang->nama }}
+                    @if(auth()->user()?->isSuperAdmin())
+                        <button wire:click="setTab('semua')"
+                            class="pos-tab {{ $activeTab === 'semua' ? 'all' : 'inactive' }}">
+                            Semua Produk
                         </button>
-                    @endforeach
+                        @foreach ($this->gudangs as $gudang)
+                            <button wire:click="setTab('{{ $gudang->nama }}')"
+                                class="pos-tab {{ $activeTab === $gudang->nama ? 'gudang-a' : 'inactive' }}">
+                                {{ $gudang->nama }}
+                            </button>
+                        @endforeach
+                    @endif
                     <span class="pos-product-count">{{ $this->products->count() }} produk</span>
                 </div>
             </div>

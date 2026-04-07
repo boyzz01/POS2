@@ -25,6 +25,11 @@ class KategoriResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Master Kategori';
 
+    public static function canAccess(): bool
+    {
+        return !auth()->user()?->isKasir();
+    }
+
     protected static ?int $navigationSort = 10;
 
     public static function form(Schema $schema): Schema

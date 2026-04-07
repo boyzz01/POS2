@@ -37,6 +37,11 @@ class BarangKeluarResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Daftar Barang Keluar';
 
+    public static function canAccess(): bool
+    {
+        return !auth()->user()?->isKasir();
+    }
+
     protected static ?int $navigationSort = 4;
 
     public static function form(Schema $schema): Schema

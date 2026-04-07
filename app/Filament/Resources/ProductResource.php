@@ -35,6 +35,11 @@ class ProductResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Katalog Produk';
 
+    public static function canAccess(): bool
+    {
+        return !auth()->user()?->isKasir();
+    }
+
     protected static ?int $navigationSort = 1;
 
     public static function form(Schema $schema): Schema

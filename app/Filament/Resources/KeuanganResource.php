@@ -41,6 +41,11 @@ class KeuanganResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Pemasukan & Pengeluaran';
 
+    public static function canAccess(): bool
+    {
+        return !auth()->user()?->isKasir();
+    }
+
     protected static ?int $navigationSort = 3;
 
     public static function form(Schema $schema): Schema

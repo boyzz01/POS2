@@ -1,5 +1,6 @@
 @php
     use App\Models\Keuangan;
+    if (! auth()->user()?->isSuperAdmin()) return;
     $reminders = Keuangan::where('jenis', 'pemasukan')
         ->where('reminder_aktif', true)
         ->where('reminder_selesai', false)

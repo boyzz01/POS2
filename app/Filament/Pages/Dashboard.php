@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Filament\Resources\ProductResource;
 use App\Models\Gudang;
 use Filament\Pages\Dashboard as BaseDashboard;
 
@@ -10,6 +11,24 @@ class Dashboard extends BaseDashboard
     protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-home';
 
     public string $activeGudang = 'semua';
+
+    public function mount()
+    {
+        $user = auth()->user();
+
+        if ($user?->isKasir()) {
+            return redirect()->to(PosKasir::getUrl());
+        }
+
+        if ($user?->isAdmin()) {
+            return redirect()->to(ProductResource::getUrl());
+        }
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return auth()->user()?->isSuperAdmin() ?? false;
+    }
 
     public function setGudang(string $key): void
     {

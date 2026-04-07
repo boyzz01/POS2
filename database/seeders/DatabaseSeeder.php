@@ -39,6 +39,33 @@ class DatabaseSeeder extends Seeder
             );
         }
 
+        // Kasir Gudang Medan
+        if ($gudangMedan) {
+            User::firstOrCreate(
+                ['email' => 'kasir.medan@mbg.test'],
+                [
+                    'name'      => 'Kasir Medan',
+                    'password'  => Hash::make('password'),
+                    'role'      => 'kasir',
+                    'gudang_id' => $gudangMedan->id,
+                ]
+            );
+        }
+
+        // Admin Gudang Stabat
+        $gudangStabat = Gudang::where('nama', 'Gudang Stabat')->first();
+        if ($gudangStabat) {
+            User::firstOrCreate(
+                ['email' => 'admin.stabat@mbg.test'],
+                [
+                    'name'      => 'Admin Stabat',
+                    'password'  => Hash::make('password'),
+                    'role'      => 'admin',
+                    'gudang_id' => $gudangStabat->id,
+                ]
+            );
+        }
+
         // Customer contoh — akses storefront /login
         Customer::firstOrCreate(
             ['email' => 'customer@mbg.test'],

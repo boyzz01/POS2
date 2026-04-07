@@ -53,9 +53,9 @@
                 <select id="kategori" name="kategori"
                         class="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent bg-white transition-shadow">
                     <option value="">Semua Kategori</option>
-                    @foreach($categories as $cat)
-                    <option value="{{ $cat }}" {{ request('kategori') === $cat ? 'selected' : '' }}>
-                        {{ $cat }}
+                    @foreach($categories as $id => $nama)
+                    <option value="{{ $id }}" {{ request('kategori') == $id ? 'selected' : '' }}>
+                        {{ $nama }}
                     </option>
                     @endforeach
                 </select>

@@ -20,6 +20,13 @@ class ListTransaksis extends ListRecords
 
     public function getTabs(): array
     {
+        $user = auth()->user();
+
+        // Non-super-admin users only see their own gudang — no tabs needed
+        if (! $user?->isSuperAdmin()) {
+            return [];
+        }
+
         $tabs = [
             'semua' => Tab::make('Semua')
                 ->icon('heroicon-o-globe-alt')

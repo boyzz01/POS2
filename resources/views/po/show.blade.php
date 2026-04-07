@@ -68,7 +68,7 @@
                         <div class="flex-1">
                             @if ($product->kategori)
                                 <span
-                                    class="inline-block text-xs font-semibold bg-sky-100 text-sky-700 px-2 py-0.5 rounded-full mb-1">{{ $product->kategori }}</span>
+                                    class="inline-block text-xs font-semibold bg-sky-100 text-sky-700 px-2 py-0.5 rounded-full mb-1">{{ $product->kategori?->nama }}</span>
                             @endif
                             <p class="font-bold text-gray-900">{{ $product->merk }}</p>
                             <p class="text-sm text-gray-500">{{ $product->ukuran }} · {{ $product->pcs_per_karton }}

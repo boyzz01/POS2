@@ -39,7 +39,7 @@
         {{-- Product Details --}}
         <div class="flex flex-col">
             @if($product->kategori)
-            <span class="text-xs font-semibold text-sky-600 uppercase tracking-wide mb-2">{{ $product->kategori }}</span>
+            <span class="text-xs font-semibold text-sky-600 uppercase tracking-wide mb-2">{{ $product->kategori?->nama }}</span>
             @endif
 
             <h1 class="text-3xl font-bold text-gray-900 mb-1">{{ $product->merk }}</h1>

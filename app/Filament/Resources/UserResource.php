@@ -69,13 +69,17 @@ class UserResource extends Resource
                     ->options([
                         'super_admin' => 'Super Admin',
                         'admin'       => 'Admin Gudang',
+                        'kasir'       => 'Kasir',
                     ])
-                    ->default('admin')
+                    ->default('kasir')
                     ->required()
                     ->live()
-                    ->helperText(fn ($state) => $state === 'super_admin'
-                        ? 'Akses penuh ke semua gudang.'
-                        : 'Hanya dapat mengakses gudang yang ditentukan.'),
+                    ->helperText(fn ($state) => match($state) {
+                        'super_admin' => 'Akses penuh ke semua gudang.',
+                        'admin'       => 'Akses penuh ke gudang yang ditentukan.',
+                        'kasir'       => 'Hanya akses menu Kasir/POS dan Transaksi.',
+                        default       => '',
+                    }),
 
                 Select::make('gudang_id')
                     ->label('Gudang')
@@ -83,8 +87,8 @@ class UserResource extends Resource
                     ->searchable()
                     ->nullable()
                     ->hidden(fn ($get) => $get('role') === 'super_admin')
-                    ->required(fn ($get) => $get('role') === 'admin')
-                    ->helperText('Pilih gudang yang dapat diakses oleh admin ini.'),
+                    ->required(fn ($get) => in_array($get('role'), ['admin', 'kasir']))
+                    ->helperText('Pilih gudang yang dapat diakses.'),
             ])->columns(2),
         ]);
     }
@@ -109,11 +113,13 @@ class UserResource extends Resource
                     ->color(fn ($state) => match($state) {
                         'super_admin' => 'danger',
                         'admin'       => 'primary',
+                        'kasir'       => 'warning',
                         default       => 'gray',
                     })
                     ->formatStateUsing(fn ($state) => match($state) {
                         'super_admin' => 'Super Admin',
                         'admin'       => 'Admin Gudang',
+                        'kasir'       => 'Kasir',
                         default       => $state,
                     }),
 

@@ -36,6 +36,11 @@ class BarangMasukResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Riwayat Barang Masuk';
 
+    public static function canAccess(): bool
+    {
+        return !auth()->user()?->isKasir();
+    }
+
     protected static ?int $navigationSort = 2;
 
     public static function form(Schema $schema): Schema

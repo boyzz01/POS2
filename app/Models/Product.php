@@ -72,13 +72,16 @@ class Product extends Model
         return $query->where('is_featured', true)->where('is_active', true);
     }
 
-    public function scopeByKategori(Builder $query, ?string $kategori): Builder
+    public function scopeByKategori(Builder $query, mixed $kategori): Builder
     {
         if (! $kategori) {
             return $query;
         }
 
-        return $query->where('kategori', $kategori);
+        // Accept either kategori ID (int) or nama (string)
+        return is_numeric($kategori)
+            ? $query->where('kategori_id', $kategori)
+            : $query->whereHas('kategori', fn ($q) => $q->where('nama', $kategori));
     }
 
     // -------------------------------------------------------------------------
