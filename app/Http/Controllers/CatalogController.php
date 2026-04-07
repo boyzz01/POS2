@@ -26,7 +26,27 @@ class CatalogController extends Controller
             $query->byKategori($request->kategori);
         }
 
-        $products = $query->orderBy('merk')->paginate(12)->withQueryString();
+        // Ambil semua produk aktif untuk hitung stok (stok_karton adalah computed attribute)
+        $allProducts = $query->orderBy('kategori')->orderBy('merk')->get();
+
+        $tab = $request->input('tab', 'ready');
+        $filtered = $tab === 'po'
+            ? $allProducts->filter(fn ($p) => $p->stok_karton <= 0)
+            : $allProducts->filter(fn ($p) => $p->stok_karton > 0);
+
+        $countReady = $allProducts->filter(fn ($p) => $p->stok_karton > 0)->count();
+        $countPo    = $allProducts->filter(fn ($p) => $p->stok_karton <= 0)->count();
+
+        // Manual pagination
+        $page     = $request->input('page', 1);
+        $perPage  = 12;
+        $products = new \Illuminate\Pagination\LengthAwarePaginator(
+            $filtered->slice(($page - 1) * $perPage, $perPage)->values(),
+            $filtered->count(),
+            $perPage,
+            $page,
+            ['path' => $request->url(), 'query' => $request->query()]
+        );
 
         $categories = Product::active()
             ->whereNotNull('kategori')
@@ -35,7 +55,7 @@ class CatalogController extends Controller
             ->sort()
             ->values();
 
-        return view('catalog.index', compact('products', 'categories'));
+        return view('catalog.index', compact('products', 'categories', 'tab', 'countReady', 'countPo'));
     }
 
     public function show(Product $product): View

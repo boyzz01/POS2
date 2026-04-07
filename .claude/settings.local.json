@@ -10,7 +10,8 @@
       "Bash(python src/ui-ux-pro-max/scripts/search.py \"clean institutional modern B2B service\" --domain style -n 4 -f markdown)",
       "Bash(rtk php:*)",
       "Bash(rtk npm:*)",
-      "Bash(rtk git:*)"
+      "Bash(rtk git:*)",
+      "Bash(rtk grep:*)"
     ]
   }
 }

@@ -12,9 +12,26 @@
         <p class="text-gray-500 mt-1">Temukan produk kebutuhan MBG berkualitas untuk program Anda</p>
     </div>
 
+    {{-- Tabs --}}
+    <div class="flex gap-1 bg-gray-100 p-1 rounded-xl mb-6 w-fit">
+        <a href="{{ route('catalog.index', array_merge(request()->except(['tab', 'page']), ['tab' => 'ready'])) }}"
+           class="px-5 py-2 text-sm font-semibold rounded-lg transition-colors
+                  {{ $tab === 'ready' ? 'bg-white text-sky-700 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
+            Ready Stock
+            <span class="ml-1.5 text-xs font-bold {{ $tab === 'ready' ? 'text-sky-600' : 'text-gray-400' }}">{{ $countReady }}</span>
+        </a>
+        <a href="{{ route('catalog.index', array_merge(request()->except(['tab', 'page']), ['tab' => 'po'])) }}"
+           class="px-5 py-2 text-sm font-semibold rounded-lg transition-colors
+                  {{ $tab === 'po' ? 'bg-white text-amber-600 shadow-sm' : 'text-gray-500 hover:text-gray-700' }}">
+            Pre-Order (PO)
+            <span class="ml-1.5 text-xs font-bold {{ $tab === 'po' ? 'text-amber-500' : 'text-gray-400' }}">{{ $countPo }}</span>
+        </a>
+    </div>
+
     {{-- Filter & Search --}}
     <form method="GET" action="{{ route('catalog.index') }}"
           class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-8">
+        <input type="hidden" name="tab" value="{{ $tab }}">
         <div class="flex flex-col sm:flex-row gap-4">
             <div class="flex-1">
                 <label for="search" class="block text-xs font-medium text-gray-500 mb-1.5">Cari Produk</label>
@@ -51,7 +68,7 @@
                     Cari
                 </button>
                 @if(request('search') || request('kategori'))
-                <a href="{{ route('catalog.index') }}"
+                <a href="{{ route('catalog.index', ['tab' => $tab]) }}"
                    class="px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition-colors">
                     Reset
                 </a>

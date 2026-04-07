@@ -34,10 +34,6 @@
 
             {{-- Desktop nav --}}
             <div class="hidden md:flex items-center gap-6">
-                <a href="{{ route('home') }}"
-                   class="text-sm font-medium {{ request()->routeIs('home') ? 'text-sky-600' : 'text-gray-600 hover:text-sky-600' }} transition-colors">
-                    Beranda
-                </a>
                 <a href="{{ route('catalog.index') }}"
                    class="text-sm font-medium {{ request()->routeIs('catalog.*') ? 'text-sky-600' : 'text-gray-600 hover:text-sky-600' }} transition-colors">
                     Katalog Produk
@@ -129,7 +125,6 @@
 
         {{-- Mobile menu --}}
         <div x-show="open" x-transition class="md:hidden pb-4 space-y-1">
-            <a href="{{ route('home') }}" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-sky-600">Beranda</a>
             <a href="{{ route('catalog.index') }}" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-sky-600">Katalog Produk</a>
             @auth('customer')
             <a href="{{ route('orders.index') }}" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-sky-600">Pesanan Saya</a>

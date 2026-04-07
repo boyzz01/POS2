@@ -7,7 +7,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\CheckoutController;
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PoController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentProofController;
 use App\Models\Product;
@@ -19,15 +19,15 @@ use Maatwebsite\Excel\Facades\Excel;
 // Public storefront
 // ─────────────────────────────────────────────
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', fn () => redirect()->route('catalog.index'))->name('home');
 
 Route::prefix('katalog')->name('catalog.')->group(function () {
     Route::get('/', [CatalogController::class, 'index'])->name('index');
     Route::get('/{product}', [CatalogController::class, 'show'])->name('show');
 });
 
-// Cart — guest boleh add, checkout wajib login
-Route::prefix('keranjang')->name('cart.')->group(function () {
+// Cart — semua aksi wajib login
+Route::prefix('keranjang')->name('cart.')->middleware('auth:customer')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('index');
     Route::post('/tambah/{product}', [CartController::class, 'add'])->name('add');
     Route::patch('/set/{product}', [CartController::class, 'set'])->name('set');
@@ -58,6 +58,11 @@ Route::post('/logout', [LogoutController::class, 'logout'])
 // ─────────────────────────────────────────────
 
 Route::middleware(['auth:customer'])->group(function () {
+    Route::prefix('po')->name('po.')->group(function () {
+        Route::get('/{product}', [PoController::class, 'show'])->name('show');
+        Route::post('/{product}', [PoController::class, 'store'])->name('store');
+    });
+
     Route::prefix('checkout')->name('checkout.')->group(function () {
         Route::get('/', [CheckoutController::class, 'index'])->name('index');
         Route::post('/', [CheckoutController::class, 'store'])->name('store');
