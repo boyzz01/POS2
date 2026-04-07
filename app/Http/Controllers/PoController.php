@@ -34,22 +34,19 @@ class PoController extends Controller
         abort_unless($product->is_active, 404);
 
         $data = $request->validate([
-            'quantity'         => ['required', 'integer', 'min:1', 'max:9999'],
-            'customer_name'    => ['required', 'string', 'max:255'],
-            'customer_phone'   => ['required', 'string', 'max:20'],
-            'customer_address' => ['required', 'string', 'max:1000'],
-            'notes'            => ['nullable', 'string', 'max:500'],
-            'shipping_cost'    => ['nullable', 'integer', 'min:0'],
-            'proof'            => ['required', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:5120'],
+            'quantity'       => ['required', 'integer', 'min:1', 'max:9999'],
+            'customer_name'  => ['required', 'string', 'max:255'],
+            'customer_phone' => ['required', 'string', 'max:20'],
+            'notes' => ['nullable', 'string', 'max:500'],
+            'proof' => ['required', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:5120'],
         ], [
-            'quantity.required'         => 'Jumlah pesanan wajib diisi.',
-            'quantity.min'              => 'Minimal pesan 1 karton.',
-            'customer_name.required'    => 'Nama pemesan wajib diisi.',
-            'customer_phone.required'   => 'Nomor WhatsApp wajib diisi.',
-            'customer_address.required' => 'Alamat pengiriman wajib diisi.',
-            'proof.required'            => 'Bukti transfer wajib diupload.',
-            'proof.mimes'               => 'Format bukti harus JPG, PNG, atau PDF.',
-            'proof.max'                 => 'Ukuran file maksimal 5 MB.',
+            'quantity.required'       => 'Jumlah pesanan wajib diisi.',
+            'quantity.min'            => 'Minimal pesan 1 karton.',
+            'customer_name.required'  => 'Nama pemesan wajib diisi.',
+            'customer_phone.required' => 'Nomor WhatsApp wajib diisi.',
+            'proof.required'          => 'Bukti transfer wajib diupload.',
+            'proof.mimes'             => 'Format bukti harus JPG, PNG, atau PDF.',
+            'proof.max'               => 'Ukuran file maksimal 5 MB.',
         ]);
 
         $customer = auth('customer')->user();

@@ -146,7 +146,6 @@ class ViewOrder extends ViewRecord
                             TextEntry::make('customer_name')->label('Nama Pemesan'),
                             TextEntry::make('customer_phone')->label('WhatsApp'),
                             TextEntry::make('customer.email')->label('Email Customer'),
-                            TextEntry::make('customer_address')->label('Alamat Pengiriman')->columnSpanFull(),
                             TextEntry::make('notes')->label('Catatan')->placeholder('—')->columnSpanFull(),
                         ]),
                     ]),
@@ -165,9 +164,8 @@ class ViewOrder extends ViewRecord
                             })
                             ->columnSpanFull(),
 
-                        Grid::make(3)->schema([
+                        Grid::make(2)->schema([
                             TextEntry::make('subtotal')->label('Subtotal')->money('IDR'),
-                            TextEntry::make('shipping_cost')->label('Ongkir')->money('IDR'),
                             TextEntry::make('total')->label('Total')->money('IDR')->weight('bold'),
                         ]),
                     ]),

@@ -51,30 +51,6 @@
                                class="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 @error('customer_phone') border-red-400 @enderror">
                     </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">
-                            Ongkir (opsional)
-                        </label>
-                        <div class="relative">
-                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">Rp</span>
-                            <input type="number" name="shipping_cost"
-                                   value="{{ old('shipping_cost', 0) }}"
-                                   min="0"
-                                   placeholder="0"
-                                   class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
-                        </div>
-                        <p class="text-xs text-gray-400 mt-1">Kosongkan atau isi 0 jika tidak ada ongkir</p>
-                    </div>
-
-                    <div class="sm:col-span-2">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">
-                            Alamat Pengiriman <span class="text-red-500">*</span>
-                        </label>
-                        <textarea name="customer_address" rows="3" required
-                                  placeholder="Alamat lengkap termasuk kota dan kode pos"
-                                  class="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 resize-none @error('customer_address') border-red-400 @enderror">{{ old('customer_address') }}</textarea>
-                    </div>
-
                     <div class="sm:col-span-2">
                         <label class="block text-sm font-medium text-gray-700 mb-1">
                             Catatan Pesanan (opsional)
@@ -123,23 +99,10 @@
                     @endforeach
                 </div>
 
-                <div class="border-t border-gray-100 pt-4 space-y-2 text-sm mb-6"
-                     x-data="{ shipping: 0 }"
-                     x-init="document.querySelector('[name=shipping_cost]').addEventListener('input', e => shipping = parseInt(e.target.value) || 0)">
-                    <div class="flex justify-between text-gray-600">
-                        <span>Subtotal</span>
-                        <span>Rp {{ number_format($subtotal, 0, ',', '.') }}</span>
-                    </div>
-                    <div class="flex justify-between text-gray-600">
-                        <span>Ongkir</span>
-                        <span x-text="'Rp ' + shipping.toLocaleString('id-ID')">Rp 0</span>
-                    </div>
-                    <div class="flex justify-between font-bold text-gray-900 text-base pt-2 border-t border-gray-100">
+                <div class="border-t border-gray-100 pt-4 space-y-2 text-sm mb-6">
+                    <div class="flex justify-between font-bold text-gray-900 text-base pt-2">
                         <span>Total</span>
-                        <span class="text-sky-700"
-                              x-text="'Rp ' + ({{ $subtotal }} + shipping).toLocaleString('id-ID')">
-                            Rp {{ number_format($subtotal, 0, ',', '.') }}
-                        </span>
+                        <span class="text-sky-700">Rp {{ number_format($subtotal, 0, ',', '.') }}</span>
                     </div>
                 </div>
 

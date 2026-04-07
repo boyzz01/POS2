@@ -78,12 +78,6 @@
                     <span>Subtotal</span>
                     <span>Rp {{ number_format($order->subtotal, 0, ',', '.') }}</span>
                 </div>
-                @if($order->shipping_cost > 0)
-                <div class="flex justify-between text-gray-600">
-                    <span>Ongkir</span>
-                    <span>Rp {{ number_format($order->shipping_cost, 0, ',', '.') }}</span>
-                </div>
-                @endif
                 <div class="flex justify-between font-bold text-gray-900 text-base pt-2 border-t border-gray-100">
                     <span>TOTAL TRANSFER</span>
                     <span class="text-sky-700 text-lg">Rp {{ number_format($order->total, 0, ',', '.') }}</span>

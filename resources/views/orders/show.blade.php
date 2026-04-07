@@ -62,12 +62,6 @@
                         <span>Subtotal</span>
                         <span>Rp {{ number_format($order->subtotal, 0, ',', '.') }}</span>
                     </div>
-                    @if($order->shipping_cost > 0)
-                    <div class="flex justify-between text-gray-600">
-                        <span>Ongkir</span>
-                        <span>Rp {{ number_format($order->shipping_cost, 0, ',', '.') }}</span>
-                    </div>
-                    @endif
                     <div class="flex justify-between font-bold text-gray-900 text-base">
                         <span>Total</span>
                         <span class="text-sky-700">Rp {{ number_format($order->total, 0, ',', '.') }}</span>
@@ -87,10 +81,6 @@
                 <div>
                     <p class="text-gray-400 text-xs font-medium uppercase tracking-wide mb-1">WhatsApp</p>
                     <p class="font-medium text-gray-900">{{ $order->customer_phone }}</p>
-                </div>
-                <div class="sm:col-span-2">
-                    <p class="text-gray-400 text-xs font-medium uppercase tracking-wide mb-1">Alamat Pengiriman</p>
-                    <p class="font-medium text-gray-900">{{ $order->customer_address }}</p>
                 </div>
                 @if($order->notes)
                 <div class="sm:col-span-2">

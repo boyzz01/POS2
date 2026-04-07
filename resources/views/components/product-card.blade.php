@@ -106,7 +106,7 @@
             {{-- Cart action --}}
             @if (!$inStock)
                 <a href="{{ auth('customer')->check() ? route('po.show', $product) : route('login') }}"
-                   class="flex items-center justify-center gap-1.5 w-full mt-3 py-2 text-sm font-medium rounded-lg bg-amber-500 hover:bg-amber-600 text-white transition-colors">
+                   class="flex items-center justify-center gap-1.5 w-full mt-3 py-2 text-sm font-medium rounded-lg bg-sky-600 hover:bg-sky-700 text-white transition-colors">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 11H4L5 9z"/>
                     </svg>
@@ -137,7 +137,7 @@
                             <span x-text="qty"></span>
                             {{-- Dot indikator syncing --}}
                             <span x-show="syncing"
-                                class="absolute -top-1 -right-1 w-2 h-2 bg-amber-400 rounded-full animate-pulse"></span>
+                                class="absolute -top-1 -right-1 w-2 h-2 bg-sky-400 rounded-full animate-pulse"></span>
                         </span>
 
                         <button type="button" @click="inc()" :disabled="qty >= max"
@@ -149,7 +149,7 @@
                         </button>
                     </div>
 
-                    <p x-show="capped" x-transition class="text-xs text-amber-600 mt-1.5 text-center font-medium">
+                    <p x-show="capped" x-transition class="text-xs text-sky-600 mt-1.5 text-center font-medium">
                         Maks. {{ $product->stok_karton }} karton
                     </p>
 

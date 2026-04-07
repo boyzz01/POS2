@@ -28,7 +28,7 @@ class OrderService
     {
         $cartItems    = $this->cart->all();
         $subtotal     = $this->cart->total();
-        $shippingCost = (int) ($data['shipping_cost'] ?? 0);
+        $shippingCost = 0;
         $total        = $subtotal + $shippingCost;
 
         $order = Order::create([
@@ -36,7 +36,7 @@ class OrderService
             'invoice_number'   => $this->generateInvoiceNumber(),
             'customer_name'    => $data['customer_name'],
             'customer_phone'   => $data['customer_phone'],
-            'customer_address' => $data['customer_address'],
+            'customer_address' => '',
             'notes'            => $data['notes'] ?? null,
             'subtotal'         => $subtotal,
             'shipping_cost'    => $shippingCost,
@@ -78,7 +78,7 @@ class OrderService
     {
         $quantity     = (int) $data['quantity'];
         $subtotal     = $product->harga_karton * $quantity;
-        $shippingCost = (int) ($data['shipping_cost'] ?? 0);
+        $shippingCost = 0;
         $total        = $subtotal + $shippingCost;
 
         $order = Order::create([
@@ -86,7 +86,7 @@ class OrderService
             'invoice_number'   => $this->generateInvoiceNumber(),
             'customer_name'    => $data['customer_name'],
             'customer_phone'   => $data['customer_phone'],
-            'customer_address' => $data['customer_address'],
+            'customer_address' => '',
             'notes'            => $data['notes'] ?? null,
             'subtotal'         => $subtotal,
             'shipping_cost'    => $shippingCost,
