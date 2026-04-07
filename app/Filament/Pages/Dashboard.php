@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Filament\Resources\KeuanganResource;
 use App\Filament\Resources\ProductResource;
 use App\Models\Gudang;
 use Filament\Pages\Dashboard as BaseDashboard;
@@ -20,8 +21,12 @@ class Dashboard extends BaseDashboard
             return redirect()->to(PosKasir::getUrl());
         }
 
-        if ($user?->isAdmin()) {
+        if ($user?->isAdmin() || $user?->isKepalaGudang()) {
             return redirect()->to(ProductResource::getUrl());
+        }
+
+        if ($user?->isKeuangan()) {
+            return redirect()->to(KeuanganResource::getUrl());
         }
     }
 

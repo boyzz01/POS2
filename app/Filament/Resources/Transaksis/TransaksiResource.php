@@ -28,6 +28,11 @@ class TransaksiResource extends Resource
 
     protected static ?int $navigationSort = 2;
 
+    public static function canAccess(): bool
+    {
+        $user = auth()->user();
+        return !$user?->isKasir() && !$user?->isAdmin() && !$user?->isKepalaGudang();
+    }
 
     protected static ?string $recordTitleAttribute = 'kode_transaksi';
 

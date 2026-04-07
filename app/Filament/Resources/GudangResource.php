@@ -36,7 +36,8 @@ class GudangResource extends Resource
 
     public static function canAccess(): bool
     {
-        return !auth()->user()?->isKasir();
+        $user = auth()->user();
+        return !$user?->isKasir() && !$user?->isAdmin() && !$user?->isKepalaGudang() && !$user?->isKeuangan();
     }
 
     protected static ?int $navigationSort = 2;

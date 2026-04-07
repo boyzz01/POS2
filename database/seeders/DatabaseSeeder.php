@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Admin user — super admin, akses semua gudang
-        User::firstOrCreate(
+        User::updateOrCreate(
             ['email' => 'admin@mbg.test'],
             [
                 'name'     => 'Admin MBG',
@@ -52,6 +52,19 @@ class DatabaseSeeder extends Seeder
             );
         }
 
+        // Kepala Gudang Medan
+        if ($gudangMedan) {
+            User::firstOrCreate(
+                ['email' => 'kepala.medan@mbg.test'],
+                [
+                    'name'      => 'Kepala Gudang Medan',
+                    'password'  => Hash::make('password'),
+                    'role'      => 'kepala_gudang',
+                    'gudang_id' => $gudangMedan->id,
+                ]
+            );
+        }
+
         // Admin Gudang Stabat
         $gudangStabat = Gudang::where('nama', 'Gudang Stabat')->first();
         if ($gudangStabat) {
@@ -65,6 +78,30 @@ class DatabaseSeeder extends Seeder
                 ]
             );
         }
+
+        // Kepala Gudang Stabat
+        if ($gudangStabat) {
+            User::firstOrCreate(
+                ['email' => 'kepala.stabat@mbg.test'],
+                [
+                    'name'      => 'Kepala Gudang Stabat',
+                    'password'  => Hash::make('password'),
+                    'role'      => 'kepala_gudang',
+                    'gudang_id' => $gudangStabat->id,
+                ]
+            );
+        }
+
+        // Keuangan — hanya akses menu keuangan
+        User::firstOrCreate(
+            ['email' => 'keuangan@mbg.test'],
+            [
+                'name'     => 'Staff Keuangan',
+                'password' => Hash::make('password'),
+                'role'     => 'keuangan',
+                'gudang_id' => '1',
+            ]
+        );
 
         // Customer contoh — akses storefront /login
         Customer::firstOrCreate(

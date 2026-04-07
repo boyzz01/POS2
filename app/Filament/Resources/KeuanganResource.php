@@ -43,7 +43,9 @@ class KeuanganResource extends Resource
 
     public static function canAccess(): bool
     {
-        return !auth()->user()?->isKasir();
+        $user = auth()->user();
+        return !$user?->isKasir() && !$user?->isAdmin() && !$user?->isKepalaGudang()
+            || $user?->isKeuangan();
     }
 
     protected static ?int $navigationSort = 3;
@@ -108,6 +110,8 @@ class KeuanganResource extends Resource
                                 ->get()
                                 ->mapWithKeys(fn ($g) => [$g->id => ($g->tipe === 'toko' ? '🏪 ' : '🏭 ') . $g->nama])
                             )
+                            ->default(fn () => auth()->user()?->gudang_id)
+                            ->hidden(fn () => (bool) auth()->user()?->gudang_id)
                             ->placeholder('Pilih gudang atau toko')
                             ->columnSpanFull(),
                     ])
@@ -184,6 +188,12 @@ class KeuanganResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(function ($query) {
+                $gudangId = auth()->user()?->activeGudangId();
+                if ($gudangId) {
+                    $query->where('gudang_id', $gudangId);
+                }
+            })
             ->columns([
                 TextColumn::make('tanggal')
                     ->label('Tanggal')

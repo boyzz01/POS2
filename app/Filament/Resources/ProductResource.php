@@ -37,7 +37,28 @@ class ProductResource extends Resource
 
     public static function canAccess(): bool
     {
+        $user = auth()->user();
+        return !$user?->isKasir() && !$user?->isKeuangan();
+    }
+
+    public static function canCreate(): bool
+    {
         return !auth()->user()?->isKasir();
+    }
+
+    public static function canEdit($record): bool
+    {
+        return auth()->user()?->isSuperAdmin() ?? false;
+    }
+
+    public static function canDelete($record): bool
+    {
+        return auth()->user()?->isSuperAdmin() ?? false;
+    }
+
+    public static function canDeleteAny(): bool
+    {
+        return auth()->user()?->isSuperAdmin() ?? false;
     }
 
     protected static ?int $navigationSort = 1;
@@ -212,7 +233,8 @@ class ProductResource extends Resource
             ])
             ->recordActions([
                 ViewAction::make(),
-                EditAction::make(),
+                EditAction::make()
+                    ->visible(fn () => auth()->user()?->isSuperAdmin() ?? false),
             ])
             ->toolbarActions([
                 Action::make('exportExcel')

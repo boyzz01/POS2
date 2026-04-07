@@ -23,6 +23,11 @@ class PosKasir extends Page
 
     protected static ?int $navigationSort = 0;
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->isKasir() ?? false;
+    }
+
     public string $search            = '';
     public string $activeTab         = 'semua';
     public array  $cart              = [];

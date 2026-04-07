@@ -25,7 +25,8 @@ class ReminderKeuanganWidget extends Widget
 
     public static function canView(): bool
     {
-        if (! auth()->user()?->isSuperAdmin()) {
+        $user = auth()->user();
+        if (! $user?->isSuperAdmin() && ! $user?->isKeuangan()) {
             return false;
         }
 

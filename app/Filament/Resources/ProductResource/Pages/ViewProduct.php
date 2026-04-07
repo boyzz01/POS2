@@ -13,7 +13,8 @@ class ViewProduct extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            EditAction::make(),
+            EditAction::make()
+                ->visible(fn () => auth()->user()?->isSuperAdmin() ?? false),
         ];
     }
 }

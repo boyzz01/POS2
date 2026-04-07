@@ -18,7 +18,10 @@
       "Read(//c/laragon/www/POS2/app/Providers/**)",
       "Bash(rmdir public/storage)",
       "Bash(rm public/storage)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(rtk ls:*)",
+      "Bash(grep -n \"canAccess\\\\|isKasir\\\\|isAdmin\\\\|isSuperAdmin\" c:/laragon/www/POS2/app/Filament/Pages/*.php)",
+      "Bash(grep -n \"canView\\\\|isKasir\\\\|isAdmin\\\\|isSuperAdmin\" c:/laragon/www/POS2/app/Filament/Widgets/*.php)"
     ]
   }
 }

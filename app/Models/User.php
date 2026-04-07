@@ -65,6 +65,16 @@ class User extends Authenticatable implements FilamentUser
         return $this->role === 'kasir';
     }
 
+    public function isKepalaGudang(): bool
+    {
+        return $this->role === 'kepala_gudang';
+    }
+
+    public function isKeuangan(): bool
+    {
+        return $this->role === 'keuangan';
+    }
+
     /** Gudang ID yang berlaku: dari user jika terikat, dari session jika super_admin */
     public function activeGudangId(): ?int
     {

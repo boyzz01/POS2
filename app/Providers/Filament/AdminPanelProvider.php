@@ -51,7 +51,7 @@ class AdminPanelProvider extends PanelProvider
                 Css::make('app-css', public_path($this->getViteAsset('resources/css/app.css'))),
             ])
             ->sidebarCollapsibleOnDesktop()
-            ->renderHook('panels::global-search.start', fn () => auth()->check()
+            ->renderHook('panels::user-menu.before', fn () => auth()->check()
                 ? new HtmlString(Blade::render("<div class=\"pl-[10px] pr-4\">@livewire('gudang-selector')</div>"))
                 : '')
             ->renderHook('panels::page.start', fn () => auth()->check()

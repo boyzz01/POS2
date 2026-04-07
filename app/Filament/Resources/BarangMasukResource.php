@@ -38,7 +38,8 @@ class BarangMasukResource extends Resource
 
     public static function canAccess(): bool
     {
-        return !auth()->user()?->isKasir();
+        $user = auth()->user();
+        return !$user?->isKasir() && !$user?->isKeuangan();
     }
 
     protected static ?int $navigationSort = 2;
