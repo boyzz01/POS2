@@ -5,6 +5,7 @@ namespace App\Filament\Resources\ProductResource\Pages;
 use App\Filament\Resources\ProductResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+use Livewire\Attributes\On;
 
 class ListProducts extends ListRecords
 {
@@ -16,5 +17,12 @@ class ListProducts extends ListRecords
             CreateAction::make()
                 ->label('Tambah Barang'),
         ];
+    }
+
+    #[On('gudang-changed')]
+    public function onGudangChanged(?int $gudangId): void
+    {
+        session(['active_gudang_id' => $gudangId]);
+        $this->resetTable();
     }
 }

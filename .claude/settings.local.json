@@ -11,7 +11,11 @@
       "Bash(rtk php:*)",
       "Bash(rtk npm:*)",
       "Bash(rtk git:*)",
-      "Bash(rtk grep:*)"
+      "Bash(rtk grep:*)",
+      "Bash(composer show:*)",
+      "Read(//c/laragon/etc/**)",
+      "Read(//c/Windows/System32/drivers/etc/**)",
+      "Read(//c/laragon/www/POS2/app/Providers/**)"
     ]
   }
 }

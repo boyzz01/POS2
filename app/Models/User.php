@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -11,10 +13,15 @@ use Illuminate\Notifications\Notifiable;
  * Admin users — access Filament panel only.
  * Customers (storefront) are in the Customer model / customers table.
  */
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return true;
+    }
 
     protected $fillable = [
         'name',

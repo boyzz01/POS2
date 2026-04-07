@@ -109,12 +109,26 @@ class ProductResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(function ($query) {
+                $gudangId = session('active_gudang_id');
+                if ($gudangId) {
+                    $query->where('gudang_id', $gudangId);
+                }
+            })
             ->columns([
                 ImageColumn::make('foto')
                     ->label('Foto')
                     ->disk('public')
                     ->circular()
                     ->defaultImageUrl(fn () => 'https://ui-avatars.com/api/?name=P&color=7F9CF5&background=EBF4FF'),
+
+                TextColumn::make('gudang.nama')
+                    ->label('Gudang')
+                    ->badge()
+                    ->color('gray')
+                    ->sortable()
+                    ->toggleable()
+                    ->hidden(fn () => (bool) session('active_gudang_id')),
 
                 TextColumn::make('merk')
                     ->label('Merk')
