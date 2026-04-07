@@ -1,0 +1,21 @@
+<?php
+
+namespace App\Filament\Resources\KategoriResource\Pages;
+
+use App\Filament\Resources\KategoriResource;
+use Filament\Resources\Pages\CreateRecord;
+
+class CreateKategori extends CreateRecord
+{
+    protected static string $resource = KategoriResource::class;
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+
+    protected function getCreatedNotificationTitle(): ?string
+    {
+        return 'Kategori berhasil ditambahkan';
+    }
+}

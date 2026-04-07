@@ -9,7 +9,9 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use App\Models\Kategori;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
@@ -60,10 +62,21 @@ class ProductResource extends Resource
                             ->maxLength(255)
                             ->placeholder('Contoh: Frisian Flag'),
 
-                        TextInput::make('kategori')
+                        Select::make('kategori_id')
                             ->label('Kategori')
-                            ->maxLength(100)
-                            ->placeholder('Contoh: Susu, Beras, Minyak'),
+                            ->relationship('kategori', 'nama')
+                            ->searchable()
+                            ->preload()
+                            ->required()
+                            ->createOptionForm([
+                                TextInput::make('nama')
+                                    ->label('Nama Kategori')
+                                    ->required()
+                                    ->unique('kategoris', 'nama')
+                                    ->maxLength(100),
+                            ])
+                            ->createOptionUsing(fn (array $data) => Kategori::create($data)->getKey())
+                            ->placeholder('Pilih atau buat kategori baru'),
 
                         TextInput::make('ukuran')
                             ->label('Ukuran')
@@ -93,10 +106,6 @@ class ProductResource extends Resource
                             ->columnSpanFull()
                             ->placeholder('Keterangan tambahan (opsional)'),
 
-                        \Filament\Forms\Components\Toggle::make('is_featured')
-                            ->label('Produk Unggulan')
-                            ->helperText('Tampilkan di landing page'),
-
                         \Filament\Forms\Components\Toggle::make('is_active')
                             ->label('Aktif di Katalog')
                             ->default(true)
@@ -110,7 +119,7 @@ class ProductResource extends Resource
     {
         return $table
             ->modifyQueryUsing(function ($query) {
-                $gudangId = session('active_gudang_id');
+                $gudangId = auth()->user()?->activeGudangId();
                 if ($gudangId) {
                     $query->where('gudang_id', $gudangId);
                 }
@@ -136,11 +145,11 @@ class ProductResource extends Resource
                     ->sortable()
                     ->weight('bold'),
 
-                TextColumn::make('kategori')
+                TextColumn::make('kategori.nama')
                     ->label('Kategori')
                     ->badge()
                     ->color('success')
-                    ->searchable()
+                    ->sortable()
                     ->toggleable(),
 
                 TextColumn::make('ukuran')
@@ -170,14 +179,6 @@ class ProductResource extends Resource
                     ->color('success')
                     ->weight('bold'),
 
-                \Filament\Tables\Columns\IconColumn::make('is_featured')
-                    ->label('Unggulan')
-                    ->boolean()
-                    ->trueColor('warning')
-                    ->falseColor('gray')
-                    ->alignCenter()
-                    ->toggleable(),
-
                 \Filament\Tables\Columns\IconColumn::make('is_active')
                     ->label('Aktif')
                     ->boolean()
@@ -193,6 +194,12 @@ class ProductResource extends Resource
             ])
             ->defaultSort('merk')
             ->filters([
+                SelectFilter::make('kategori_id')
+                    ->label('Kategori')
+                    ->relationship('kategori', 'nama')
+                    ->searchable()
+                    ->preload(),
+
                 SelectFilter::make('ukuran')
                     ->label('Ukuran')
                     ->options(fn () => Product::query()->distinct()->pluck('ukuran', 'ukuran')->toArray())

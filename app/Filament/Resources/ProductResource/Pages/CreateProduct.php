@@ -9,6 +9,12 @@ class CreateProduct extends CreateRecord
 {
     protected static string $resource = ProductResource::class;
 
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        $data['gudang_id'] = auth()->user()?->activeGudangId() ?? $data['gudang_id'] ?? null;
+        return $data;
+    }
+
     protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index');

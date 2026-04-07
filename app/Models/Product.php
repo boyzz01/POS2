@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use App\Models\Kategori;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -12,7 +13,7 @@ class Product extends Model
     protected $fillable = [
         'foto',
         'merk',
-        'kategori',
+        'kategori_id',
         'ukuran',
         'pcs_per_karton',
         'harga_karton',
@@ -87,6 +88,11 @@ class Product extends Model
     public function gudang(): BelongsTo
     {
         return $this->belongsTo(Gudang::class);
+    }
+
+    public function kategori(): BelongsTo
+    {
+        return $this->belongsTo(Kategori::class);
     }
 
     public function barangMasuks(): HasMany

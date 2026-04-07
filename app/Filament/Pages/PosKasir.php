@@ -32,21 +32,37 @@ class PosKasir extends Page
     public string $namaPembeli       = '';
     public ?int   $gudangId          = null;
 
+    public function mount(): void
+    {
+        $user = auth()->user();
+        if ($user && $user->gudang_id) {
+            $this->gudangId  = $user->gudang_id;
+            $this->activeTab = $user->gudang->nama ?? 'semua';
+        }
+    }
+
     public function getGudangsProperty()
     {
+        $user = auth()->user();
+        if ($user && $user->gudang_id) {
+            return Gudang::where('id', $user->gudang_id)->get();
+        }
         return Gudang::where('aktif', true)->orderBy('nama')->get();
     }
 
     public function getProductsProperty()
     {
+        $user = auth()->user();
+
         return Product::query()
             ->with('gudang')
+            ->when($user?->gudang_id, fn ($q) => $q->where('gudang_id', $user->gudang_id))
+            ->when(!$user?->gudang_id && $this->activeTab !== 'semua', fn ($q) => $q
+                ->whereHas('gudang', fn ($q2) => $q2->where('nama', $this->activeTab))
+            )
             ->when($this->search, fn ($q) => $q
                 ->where('merk', 'like', "%{$this->search}%")
                 ->orWhere('ukuran', 'like', "%{$this->search}%")
-            )
-            ->when($this->activeTab !== 'semua', fn ($q) => $q
-                ->whereHas('gudang', fn ($q2) => $q2->where('nama', $this->activeTab))
             )
             ->where('harga_karton', '>', 0)
             ->orderBy('merk')
@@ -208,7 +224,7 @@ class PosKasir extends Page
             'total_harga'    => $this->totalHarga,
             'total_bayar'    => $this->bayarInt,
             'kembalian'      => $this->kembalian,
-            'gudang_id'          => $this->gudangId ?: null,
+            'gudang_id'          => $this->gudangId ?: auth()->user()?->gudang_id,
             'status'             => 'selesai',
             'metode_pembayaran'  => $this->metodePembayaran,
             'nama_pembeli'       => $this->namaPembeli ?: null,

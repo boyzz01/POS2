@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Customer;
+use App\Models\Gudang;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -14,14 +15,29 @@ class DatabaseSeeder extends Seeder
 
     public function run(): void
     {
-        // Admin user — akses Filament /admin
+        // Admin user — super admin, akses semua gudang
         User::firstOrCreate(
             ['email' => 'admin@mbg.test'],
             [
                 'name'     => 'Admin MBG',
                 'password' => Hash::make('password'),
+                'role'     => 'super_admin',
             ]
         );
+
+        // Admin Gudang Medan
+        $gudangMedan = Gudang::where('nama', 'Gudang Medan')->first();
+        if ($gudangMedan) {
+            User::firstOrCreate(
+                ['email' => 'admin.medan@mbg.test'],
+                [
+                    'name'      => 'Admin Medan',
+                    'password'  => Hash::make('password'),
+                    'role'      => 'admin',
+                    'gudang_id' => $gudangMedan->id,
+                ]
+            );
+        }
 
         // Customer contoh — akses storefront /login
         Customer::firstOrCreate(
