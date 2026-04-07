@@ -238,9 +238,9 @@
                     <div
                         class="bg-sky-50 border border-sky-100 rounded-xl p-4 mb-5 text-xs text-sky-800 leading-relaxed">
                         <p class="font-semibold mb-1">Info Pembayaran Bank</p>
-                        <p><span class="font-medium">{{ config('payment.bank_name') }}</span></p>
-                        <p>{{ config('payment.bank_account') }}</p>
-                        <p>a.n. {{ config('payment.bank_holder') }}</p>
+                        <p><span class="font-medium">{{ \App\Models\Setting::get('bank_name', config('payment.bank_name')) }}</span></p>
+                        <p>{{ \App\Models\Setting::get('bank_account', config('payment.bank_account')) }}</p>
+                        <p>a.n. {{ \App\Models\Setting::get('bank_holder', config('payment.bank_holder')) }}</p>
                     </div>
 
                     <button type="submit"

@@ -6,7 +6,10 @@ use App\Enums\OrderStatus;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Product;
+use App\Notifications\NewOrderAdminNotification;
 use App\Notifications\OrderCreatedNotification;
+use App\Models\Setting;
+use App\Models\User;
 use Illuminate\Support\Str;
 
 class OrderService
@@ -42,9 +45,9 @@ class OrderService
             'shipping_cost'    => $shippingCost,
             'total'            => $total,
             'status'           => OrderStatus::AwaitingPayment,
-            'bank_name'        => config('payment.bank_name'),
-            'bank_account'     => config('payment.bank_account'),
-            'bank_holder'      => config('payment.bank_holder'),
+            'bank_name'        => Setting::get('bank_name', config('payment.bank_name')),
+            'bank_account'     => Setting::get('bank_account', config('payment.bank_account')),
+            'bank_holder'      => Setting::get('bank_holder', config('payment.bank_holder')),
         ]);
 
         foreach ($cartItems as $item) {
@@ -65,6 +68,8 @@ class OrderService
         } catch (\Throwable) {
             // Silent fail — email not configured
         }
+
+        $this->notifyAdmins($order);
 
         return $order;
     }
@@ -93,9 +98,9 @@ class OrderService
             'shipping_cost'    => $shippingCost,
             'total'            => $total,
             'status'           => OrderStatus::AwaitingPayment,
-            'bank_name'        => config('payment.bank_name'),
-            'bank_account'     => config('payment.bank_account'),
-            'bank_holder'      => config('payment.bank_holder'),
+            'bank_name'        => Setting::get('bank_name', config('payment.bank_name')),
+            'bank_account'     => Setting::get('bank_account', config('payment.bank_account')),
+            'bank_holder'      => Setting::get('bank_holder', config('payment.bank_holder')),
         ]);
 
         $order->items()->create([
@@ -111,6 +116,8 @@ class OrderService
             $customer->notify(new OrderCreatedNotification($order));
         } catch (\Throwable) {
         }
+
+        $this->notifyAdmins($order);
 
         return $order;
     }
@@ -129,6 +136,13 @@ class OrderService
             'status'           => OrderStatus::Rejected,
             'rejection_reason' => $reason,
         ]);
+    }
+
+    private function notifyAdmins(Order $order): void
+    {
+        User::whereIn('role', ['super_admin', 'admin'])->each(
+            fn (User $user) => $user->notify(new NewOrderAdminNotification($order))
+        );
     }
 
     private function generateInvoiceNumber(): string

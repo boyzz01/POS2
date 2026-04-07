@@ -209,9 +209,9 @@
             <div>
                 <h4 class="font-semibold text-white mb-4">Informasi Pembayaran</h4>
                 <div class="text-sm space-y-1 text-gray-400">
-                    <p>Bank: <span class="text-white font-medium">{{ config('payment.bank_name') }}</span></p>
-                    <p>No. Rekening: <span class="text-white font-medium">{{ config('payment.bank_account') }}</span></p>
-                    <p>Atas Nama: <span class="text-white font-medium">{{ config('payment.bank_holder') }}</span></p>
+                    <p>Bank: <span class="text-white font-medium">{{ \App\Models\Setting::get('bank_name', config('payment.bank_name')) }}</span></p>
+                    <p>No. Rekening: <span class="text-white font-medium">{{ \App\Models\Setting::get('bank_account', config('payment.bank_account')) }}</span></p>
+                    <p>Atas Nama: <span class="text-white font-medium">{{ \App\Models\Setting::get('bank_holder', config('payment.bank_holder')) }}</span></p>
                 </div>
                 <p class="text-xs text-gray-500 mt-4">Pembayaran melalui transfer bank manual. Bukti transfer wajib diupload setelah melakukan pembayaran.</p>
             </div>
