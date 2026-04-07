@@ -88,6 +88,7 @@ class OrderService
             'customer_phone'   => $data['customer_phone'],
             'customer_address' => '',
             'notes'            => $data['notes'] ?? null,
+            'is_po'            => true,
             'subtotal'         => $subtotal,
             'shipping_cost'    => $shippingCost,
             'total'            => $total,

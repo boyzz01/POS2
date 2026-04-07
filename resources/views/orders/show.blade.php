@@ -19,6 +19,9 @@
                 <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold {{ $order->status->badgeClass() }}">
                     {{ $order->status->label() }}
                 </span>
+                @if($order->is_po)
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-100 text-sky-700">Pre-Order</span>
+                @endif
                 <span class="text-sm text-gray-500">{{ $order->created_at->translatedFormat('d F Y, H:i') }}</span>
             </div>
         </div>
@@ -37,6 +40,20 @@
     @endif
 
     <div class="space-y-6">
+
+        {{-- PO Banner --}}
+        @if($order->is_po)
+        <div class="bg-sky-50 border border-sky-200 rounded-xl px-5 py-4 flex items-start gap-3">
+            <svg class="w-5 h-5 text-sky-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 11H4L5 9z"/>
+            </svg>
+            <div>
+                <p class="text-sm font-semibold text-sky-800">Pesanan Pre-Order (PO)</p>
+                <p class="text-xs text-sky-700 mt-0.5">Pesanan ini adalah PO — barang akan disiapkan setelah pembayaran dikonfirmasi. Estimasi ketersediaan akan dikonfirmasi oleh admin.</p>
+            </div>
+        </div>
+        @endif
 
         {{-- Order items --}}
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">

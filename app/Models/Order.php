@@ -17,6 +17,7 @@ class Order extends Model
         'customer_phone',
         'customer_address',
         'notes',
+        'is_po',
         'subtotal',
         'shipping_cost',
         'total',
@@ -30,6 +31,7 @@ class Order extends Model
 
     protected $casts = [
         'status'  => OrderStatus::class,
+        'is_po'   => 'boolean',
         'paid_at' => 'datetime',
     ];
 

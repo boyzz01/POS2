@@ -33,6 +33,11 @@
                             <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold {{ $order->status->badgeClass() }}">
                                 {{ $order->status->label() }}
                             </span>
+                            @if($order->is_po)
+                            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-100 text-sky-700">
+                                Pre-Order
+                            </span>
+                            @endif
                         </div>
                         <p class="text-sm text-gray-500">{{ $order->created_at->translatedFormat('d F Y, H:i') }}</p>
                     </div>
