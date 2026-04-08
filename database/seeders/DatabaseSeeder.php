@@ -15,6 +15,26 @@ class DatabaseSeeder extends Seeder
 
     public function run(): void
     {
+        Gudang::create([
+            'nama' => 'Gudang Medan',
+            'tipe' => 'gudang',
+            'kode' => 'GUD-MDN',
+            'lokasi' => 'Medan',
+            'penanggung_jawab' => 'Admin Medan',
+            'keterangan' => 'Gudang pusat di Medan',
+            'aktif' => true,
+        ]);
+
+        Gudang::create([
+            'nama' => 'Gudang Stabat',
+            'tipe' => 'gudang',
+            'kode' => 'GUD-STB',
+            'lokasi' => 'Stabat',
+            'penanggung_jawab' => 'Admin Stabat',
+            'keterangan' => 'Gudang cabang di Stabat',
+            'aktif' => true,
+        ]);
+
         // Admin user — super admin, akses semua gudang
         User::updateOrCreate(
             ['email' => 'admin@mbg.test'],
