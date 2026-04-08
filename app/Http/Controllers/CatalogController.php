@@ -10,7 +10,10 @@ class CatalogController extends Controller
 {
     public function index(Request $request): View
     {
-        $query = Product::active()->with('gudang');
+        $lokasi = $request->input('lokasi', 'Medan');
+
+        $query = Product::active()->with('gudang')
+            ->whereHas('gudang', fn ($q) => $q->where('lokasi', $lokasi));
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -50,7 +53,7 @@ class CatalogController extends Controller
 
         $categories = \App\Models\Kategori::orderBy('nama')->pluck('nama', 'id');
 
-        return view('catalog.index', compact('products', 'categories', 'tab', 'countReady', 'countPo'));
+        return view('catalog.index', compact('products', 'categories', 'tab', 'countReady', 'countPo', 'lokasi'));
     }
 
     public function show(Product $product): View

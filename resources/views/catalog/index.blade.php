@@ -12,6 +12,19 @@
         <p class="text-gray-500 mt-1">Temukan produk kebutuhan MBG berkualitas untuk program Anda</p>
     </div>
 
+    {{-- Filter Lokasi --}}
+    <div class="flex gap-2 mb-6">
+        @foreach(['Medan', 'Stabat'] as $loc)
+        <a href="{{ route('catalog.index', array_merge(request()->except(['lokasi', 'page']), ['lokasi' => $loc])) }}"
+           class="px-5 py-2 text-sm font-semibold rounded-full border transition-colors
+                  {{ $lokasi === $loc
+                      ? 'bg-sky-600 text-white border-sky-600 shadow-sm'
+                      : 'bg-white text-gray-600 border-gray-200 hover:border-sky-400 hover:text-sky-600' }}">
+            {{ $loc }}
+        </a>
+        @endforeach
+    </div>
+
     {{-- Tabs --}}
     <div class="flex gap-1 bg-gray-100 p-1 rounded-xl mb-6 w-fit">
         <a href="{{ route('catalog.index', array_merge(request()->except(['tab', 'page']), ['tab' => 'ready'])) }}"
@@ -32,6 +45,7 @@
     <form method="GET" action="{{ route('catalog.index') }}"
           class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-8">
         <input type="hidden" name="tab" value="{{ $tab }}">
+        <input type="hidden" name="lokasi" value="{{ $lokasi }}">
         <div class="flex flex-col sm:flex-row gap-4">
             <div class="flex-1">
                 <label for="search" class="block text-xs font-medium text-gray-500 mb-1.5">Cari Produk</label>
@@ -68,7 +82,7 @@
                     Cari
                 </button>
                 @if(request('search') || request('kategori'))
-                <a href="{{ route('catalog.index', ['tab' => $tab]) }}"
+                <a href="{{ route('catalog.index', ['tab' => $tab, 'lokasi' => $lokasi]) }}"
                    class="px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition-colors">
                     Reset
                 </a>
