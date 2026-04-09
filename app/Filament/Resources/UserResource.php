@@ -91,7 +91,7 @@ class UserResource extends Resource
                     ->searchable()
                     ->nullable()
                     ->hidden(fn ($get) => $get('role') === 'super_admin')
-                    ->required(fn ($get) => in_array($get('role'), ['admin', 'kasir']))
+                    ->required(fn ($get) => in_array($get('role'), ['admin', 'kasir', 'kepala_gudang']))
                     ->helperText('Pilih gudang yang dapat diakses.'),
             ])->columns(2),
         ]);
