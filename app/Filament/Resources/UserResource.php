@@ -67,18 +67,22 @@ class UserResource extends Resource
                 Select::make('role')
                     ->label('Role')
                     ->options([
-                        'super_admin' => 'Super Admin',
-                        'admin'       => 'Admin Gudang',
-                        'kasir'       => 'Kasir',
+                        'super_admin'   => 'Super Admin',
+                        'admin'         => 'Admin Gudang',
+                        'kasir'         => 'Kasir',
+                        'kepala_gudang' => 'Kepala Gudang',
+                        'keuangan'      => 'Keuangan',
                     ])
                     ->default('kasir')
                     ->required()
                     ->live()
                     ->helperText(fn ($state) => match($state) {
-                        'super_admin' => 'Akses penuh ke semua gudang.',
-                        'admin'       => 'Akses penuh ke gudang yang ditentukan.',
-                        'kasir'       => 'Hanya akses menu Kasir/POS dan Transaksi.',
-                        default       => '',
+                        'super_admin'   => 'Akses penuh ke semua gudang.',
+                        'admin'         => 'Akses penuh ke gudang yang ditentukan.',
+                        'kasir'         => 'Hanya akses menu Kasir/POS dan Transaksi.',
+                        'kepala_gudang' => 'Akses menu Kepala Gudang.',
+                        'keuangan'      => 'Hanya akses menu Keuangan.',
+                        default         => '',
                     }),
 
                 Select::make('gudang_id')
