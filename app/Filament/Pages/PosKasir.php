@@ -25,7 +25,8 @@ class PosKasir extends Page
 
     public static function canAccess(): bool
     {
-        return auth()->user()?->isKasir() ?? false;
+        $user = auth()->user();
+        return $user?->isKasir() || $user?->isSuperAdmin() ?? false;
     }
 
     public string $search            = '';
@@ -152,6 +153,30 @@ class PosKasir extends Page
     public function removeFromCart(string $key): void
     {
         unset($this->cart[$key]);
+        $this->cart = $this->cart;
+    }
+
+    public function setQty(string $key, int $qty): void
+    {
+        if (! isset($this->cart[$key])) return;
+
+        if ($qty <= 0) {
+            $this->removeFromCart($key);
+            return;
+        }
+
+        $stok = $this->cart[$key]['stok'] ?? PHP_INT_MAX;
+        if ($qty > $stok) {
+            Notification::make()
+                ->title('Stok tidak cukup!')
+                ->body("Stok tersedia hanya {$stok} karton.")
+                ->warning()
+                ->send();
+            $qty = $stok;
+        }
+
+        $this->cart[$key]['jumlah']   = $qty;
+        $this->cart[$key]['subtotal'] = $qty * $this->cart[$key]['harga_karton'];
         $this->cart = $this->cart;
     }
 

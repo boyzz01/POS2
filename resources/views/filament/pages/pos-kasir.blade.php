@@ -256,13 +256,30 @@
             background: #fef2f2;
         }
 
-        .pos-qty-value {
-            width: 28px;
+        .pos-qty-input {
+            width: 44px;
             text-align: center;
             font-family: var(--pos-mono);
             font-size: 13px;
             font-weight: 700;
             color: var(--pos-text);
+            background: var(--pos-surface);
+            border: 1px solid var(--pos-border);
+            border-radius: var(--pos-radius-xs);
+            padding: 2px 4px;
+            outline: none;
+            -moz-appearance: textfield;
+        }
+
+        .pos-qty-input::-webkit-outer-spin-button,
+        .pos-qty-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .pos-qty-input:focus {
+            border-color: var(--pos-primary);
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, .15);
         }
 
         .pos-cart-subtotal {
@@ -1007,7 +1024,13 @@
                             <div class="pos-qty-group">
                                 <button wire:click="decrementQty('{{ $key }}')"
                                     class="pos-qty-btn danger">−</button>
-                                <span class="pos-qty-value">{{ $item['jumlah'] }}</span>
+                                <input type="number"
+                                    class="pos-qty-input"
+                                    value="{{ $item['jumlah'] }}"
+                                    min="1"
+                                    max="{{ $item['stok'] }}"
+                                    wire:change="setQty('{{ $key }}', $event.target.value)"
+                                    onclick="this.select()" />
                                 <button wire:click="incrementQty('{{ $key }}')" class="pos-qty-btn">+</button>
                             </div>
                             <span class="pos-cart-subtotal">Rp
