@@ -450,13 +450,13 @@
         }
 
         .pos-quick-btn.exact {
-            background: var(--pos-accent);
-            border-color: var(--pos-accent);
+            background: var(--pos-success);
+            border-color: var(--pos-success);
             color: #fff;
         }
 
         .pos-quick-btn.exact:hover {
-            background: #0891b2;
+            background: #059669;
         }
 
         /* ── Change Display ── */
@@ -1101,7 +1101,7 @@
                     <label>Uang Diterima</label>
                     <div class="pos-cash-input">
                         <span class="prefix">Rp</span>
-                        <input type="number" wire:model.live="totalBayar" placeholder="0" />
+                        <input type="number" wire:model.live="totalBayar" placeholder="0" id="input-bayar" />
                     </div>
                     <div class="pos-quick-amounts">
                         @foreach ([50000, 100000, 200000, 500000] as $nom)
@@ -1152,24 +1152,11 @@
 
                     <button wire:click="prosesTransaksi" wire:loading.attr="disabled" @disabled(empty($cart) || $this->bayarInt < $this->totalHarga)
                         class="pos-btn-pay {{ !empty($cart) && $this->bayarInt >= $this->totalHarga ? 'active' : 'disabled' }}">
-                        <span wire:loading.remove wire:target="prosesTransaksi"
-                            style="display:flex;align-items:center;gap:8px;">
-                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                    d="M5 13l4 4L19 7" />
-                            </svg>
-                            Proses Pembayaran
-                        </span>
-                        <span wire:loading wire:target="prosesTransaksi"
-                            style="display:flex;align-items:center;gap:8px;">
-                            <svg width="16" height="16" style="animation:spin 1s linear infinite"
-                                fill="none" viewBox="0 0 24 24">
-                                <circle opacity=".25" cx="12" cy="12" r="10" stroke="currentColor"
-                                    stroke-width="4" />
-                                <path opacity=".75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
-                            </svg>
-                            Memproses...
-                        </span>
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                d="M5 13l4 4L19 7" />
+                        </svg>
+                        Proses Pembayaran
                     </button>
                 </div>
 
@@ -1324,6 +1311,20 @@
     </div>
 
     <script>
+        function focusBayar() {
+            const el = document.getElementById('input-bayar');
+            if (el) el.focus();
+        }
+
+        // Focus saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', focusBayar);
+
+        // Focus ulang setelah Livewire update (misal setelah transaksi diproses)
+        document.addEventListener('livewire:navigated', focusBayar);
+        Livewire.hook('commit', ({ succeed }) => {
+            succeed(() => { setTimeout(focusBayar, 100); });
+        });
+
         function updateClock() {
             const el = document.getElementById('clock');
             if (!el) return;
