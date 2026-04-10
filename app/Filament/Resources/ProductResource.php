@@ -9,6 +9,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use App\Models\Gudang;
 use App\Models\Kategori;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
@@ -78,6 +79,23 @@ class ProductResource extends Resource
                             ->directory('products')
                             ->maxSize(2048)
                             ->columnSpanFull(),
+                    ]),
+
+                Section::make('Gudang')
+                    ->schema([
+                        Select::make('gudang_id')
+                            ->label('Gudang')
+                            ->options(fn () => Gudang::where('aktif', true)->orderBy('nama')->pluck('nama', 'id'))
+                            ->searchable()
+                            ->required()
+                            ->default(fn () => auth()->user()?->gudang_id)
+                            ->visible(fn () => auth()->user()?->isSuperAdmin() ?? false)
+                            ->placeholder('Pilih gudang'),
+
+                        \Filament\Forms\Components\Placeholder::make('gudang_info')
+                            ->label('Gudang')
+                            ->content(fn () => auth()->user()?->gudang?->nama ?? '-')
+                            ->visible(fn () => ! (auth()->user()?->isSuperAdmin() ?? false)),
                     ]),
 
                 Section::make('Informasi Produk')

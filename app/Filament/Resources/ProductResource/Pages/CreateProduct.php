@@ -11,7 +11,12 @@ class CreateProduct extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $data['gudang_id'] = auth()->user()?->activeGudangId() ?? $data['gudang_id'] ?? null;
+        $user = auth()->user();
+
+        if (! $user?->isSuperAdmin()) {
+            $data['gudang_id'] = $user?->gudang_id ?? $user?->activeGudangId();
+        }
+
         return $data;
     }
 
