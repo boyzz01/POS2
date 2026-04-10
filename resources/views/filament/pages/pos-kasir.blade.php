@@ -732,30 +732,33 @@
         /* ── Product Card ── */
         .pos-card {
             position: relative;
-            background: var(--pos-surface);
-            border-radius: var(--pos-radius);
-            border: 1px solid var(--pos-border);
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid #f3f4f6;
+            box-shadow: 0 1px 3px rgba(0,0,0,.06);
             overflow: hidden;
-            cursor: pointer;
-            transition: all .2s ease;
+            display: flex;
+            flex-direction: column;
+            transition: box-shadow .2s, border-color .2s;
             user-select: none;
         }
 
         .pos-card:hover {
-            border-color: var(--pos-primary);
-            box-shadow: var(--pos-shadow-lg);
-            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,.1);
+            border-color: #bae6fd;
         }
 
-        .pos-card:active {
-            transform: scale(.97);
+        .pos-card.in-cart {
+            border-color: #38bdf8;
         }
 
         .pos-card-img {
             position: relative;
             aspect-ratio: 1;
             overflow: hidden;
-            background: linear-gradient(135deg, var(--pos-surface-alt), var(--pos-surface-hover));
+            background: #f0f9ff;
+            border-radius: 12px 12px 0 0;
+            cursor: pointer;
         }
 
         .pos-card-img img {
@@ -766,25 +769,16 @@
         }
 
         .pos-card:hover .pos-card-img img {
-            transform: scale(1.08);
+            transform: scale(1.05);
         }
 
         .pos-card-img .no-img {
             width: 100%;
             height: 100%;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 4px;
-            color: var(--pos-text-muted);
-        }
-
-        .pos-card-img .no-img span {
-            font-size: 9px;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
+            color: #bae6fd;
         }
 
         .pos-card-badge {
@@ -800,13 +794,8 @@
             text-transform: uppercase;
         }
 
-        .pos-card-badge.ga {
-            background: #0d9488;
-        }
-
-        .pos-card-badge.gb {
-            background: #e11d48;
-        }
+        .pos-card-badge.ga { background: #0d9488; }
+        .pos-card-badge.gb { background: #e11d48; }
 
         .pos-card-qty-badge {
             position: absolute;
@@ -816,7 +805,7 @@
             height: 24px;
             padding: 0 6px;
             border-radius: 100px;
-            background: var(--pos-primary);
+            background: #0ea5e9;
             color: #fff;
             font-family: var(--pos-mono);
             font-size: 11px;
@@ -824,101 +813,136 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 8px rgba(79, 70, 229, .4);
-        }
-
-        .pos-card-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(79, 70, 229, 0);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background .2s ease;
-        }
-
-        .pos-card:hover .pos-card-overlay {
-            background: rgba(79, 70, 229, .08);
-        }
-
-        .pos-card-add-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: var(--pos-primary);
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 16px rgba(79, 70, 229, .4);
-            opacity: 0;
-            transform: scale(.5);
-            transition: all .2s ease;
-        }
-
-        .pos-card:hover .pos-card-add-icon {
-            opacity: 1;
-            transform: scale(1);
+            box-shadow: 0 2px 8px rgba(14, 165, 233, .4);
         }
 
         .pos-card-body {
             padding: 12px 14px 14px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .pos-card-kategori {
+            font-size: 10px;
+            font-weight: 600;
+            color: #0284c7;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            margin-bottom: 3px;
         }
 
         .pos-card-name {
             font-size: 13px;
-            font-weight: 800;
-            color: var(--pos-text);
-            white-space: nowrap;
+            font-weight: 600;
+            color: #111827;
+            line-height: 1.35;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
             overflow: hidden;
-            text-overflow: ellipsis;
-            line-height: 1.3;
+            margin-bottom: 2px;
         }
 
         .pos-card-meta {
             font-size: 11px;
-            color: var(--pos-text-muted);
-            margin-top: 2px;
-        }
-
-        .pos-card-footer {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            margin-top: 8px;
+            color: #6b7280;
+            margin-bottom: 6px;
         }
 
         .pos-card-price {
-            font-family: var(--pos-mono);
-            font-size: 14px;
-            font-weight: 800;
-            color: var(--pos-primary);
-            letter-spacing: -0.02em;
+            font-size: 15px;
+            font-weight: 700;
+            color: #0369a1;
         }
 
-        .pos-card-stock {
-            font-size: 10px;
-            font-weight: 600;
-            color: var(--pos-text-muted);
-            background: var(--pos-surface-alt);
-            padding: 2px 8px;
+        .pos-card-price-note {
+            font-size: 11px;
+            font-weight: 400;
+            color: #6b7280;
+        }
+
+        .pos-card-pcs {
+            font-size: 11px;
+            color: #6b7280;
+            margin-top: 1px;
+        }
+
+        .pos-card-stock-badge {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 500;
+            background: #f0f9ff;
+            color: #0369a1;
+            padding: 3px 10px;
             border-radius: 100px;
+            margin-top: 6px;
         }
 
-        /* In-cart indicator */
-        .pos-card.in-cart {
-            border-color: var(--pos-primary);
+        .pos-card-atc-btn {
+            width: 100%;
+            margin-top: 10px;
+            padding: 8px;
+            border-radius: 8px;
+            border: none;
+            background: #0284c7;
+            color: #fff;
+            font-family: var(--pos-font);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background .15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
         }
 
-        .pos-card.in-cart::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: var(--pos-primary);
+        .pos-card-atc-btn:hover { background: #0369a1; }
+
+        .pos-card-stepper {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #bae6fd;
+            background: #f0f9ff;
         }
+
+        .pos-card-stepper-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: transparent;
+            color: #0284c7;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background .15s;
+            flex-shrink: 0;
+        }
+
+        .pos-card-stepper-btn:hover { background: #e0f2fe; }
+
+        .pos-card-stepper-input {
+            flex: 1;
+            text-align: center;
+            font-family: var(--pos-mono);
+            font-size: 13px;
+            font-weight: 700;
+            color: #0369a1;
+            background: transparent;
+            border: none;
+            outline: none;
+            -moz-appearance: textfield;
+        }
+
+        .pos-card-stepper-input::-webkit-outer-spin-button,
+        .pos-card-stepper-input::-webkit-inner-spin-button { -webkit-appearance: none; }
 
         /* ── Empty State ── */
         .pos-empty {
@@ -1201,64 +1225,72 @@
                 <div class="pos-grid">
 
                     @forelse($this->products as $product)
-                        <div wire:key="p-{{ $product->id }}" wire:click="addToCart({{ $product->id }})"
-                            class="pos-card {{ isset($cart[(string) $product->id]) ? 'in-cart' : '' }}">
+                        @php $cartKey = (string) $product->id; $inCart = isset($cart[$cartKey]); @endphp
+                        <div wire:key="p-{{ $product->id }}"
+                            class="pos-card {{ $inCart ? 'in-cart' : '' }}">
 
-                            {{-- Image --}}
-                            <div class="pos-card-img">
+                            {{-- Image — klik tambah ke cart --}}
+                            <div class="pos-card-img" wire:click="addToCart({{ $product->id }})">
                                 @if ($product->foto)
                                     <img src="{{ Storage::disk('public')->url($product->foto) }}" alt="{{ $product->merk }}" />
                                 @else
                                     <div class="no-img">
-                                        <svg width="36" height="36" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
+                                        <svg width="48" height="48" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                                         </svg>
-                                        <span>No Image</span>
                                     </div>
                                 @endif
 
-                                {{-- Gudang Badge --}}
                                 @if ($product->gudang)
-                                    <span
-                                        class="pos-card-badge {{ $product->gudang->nama === 'Gudang A' ? 'ga' : 'gb' }}">
+                                    <span class="pos-card-badge {{ $product->gudang->nama === 'Gudang A' ? 'ga' : 'gb' }}">
                                         {{ $product->gudang->nama }}
                                     </span>
                                 @endif
 
-                                {{-- Cart Qty Badge --}}
-                                @if (isset($cart[(string) $product->id]))
-                                    <div class="pos-card-qty-badge">
-                                        {{ $cart[(string) $product->id]['jumlah'] }}
-                                    </div>
+                                @if ($inCart)
+                                    <div class="pos-card-qty-badge">{{ $cart[$cartKey]['jumlah'] }}</div>
                                 @endif
-
-                                {{-- Hover Overlay --}}
-                                <div class="pos-card-overlay">
-                                    <div class="pos-card-add-icon">
-                                        <svg width="22" height="22" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                                d="M12 4v16m8-8H4" />
-                                        </svg>
-                                    </div>
-                                </div>
                             </div>
 
                             {{-- Body --}}
                             <div class="pos-card-body">
+                                @if ($product->kategori)
+                                    <p class="pos-card-kategori">{{ $product->kategori->nama }}</p>
+                                @endif
                                 <h3 class="pos-card-name">{{ $product->merk }}</h3>
-                                <p class="pos-card-meta">
-                                    {{ $product->ukuran }}
+                                <p class="pos-card-meta">{{ $product->ukuran }}</p>
+
+                                <div style="margin-top:auto;">
+                                    <p class="pos-card-price">
+                                        Rp {{ number_format($product->harga_karton, 0, ',', '.') }}
+                                        <span class="pos-card-price-note">/ karton</span>
+                                    </p>
                                     @if ($product->pcs_per_karton)
-                                        · {{ $product->pcs_per_karton }} pcs/krt
+                                        <p class="pos-card-pcs">{{ $product->pcs_per_karton }} pcs / karton</p>
                                     @endif
-                                </p>
-                                <div class="pos-card-footer">
-                                    <span class="pos-card-price">Rp
-                                        {{ number_format($product->harga_karton, 0, ',', '.') }}</span>
-                                    <span class="pos-card-stock">Stok {{ $product->stok_karton }} krt</span>
+
+                                    <span class="pos-card-stock-badge">Stok: {{ $product->stok_karton }} karton</span>
+
+                                    @if ($inCart)
+                                        <div class="pos-card-stepper">
+                                            <button class="pos-card-stepper-btn"
+                                                wire:click="decrementQty('{{ $cartKey }}')">−</button>
+                                            <input type="number"
+                                                class="pos-card-stepper-input"
+                                                value="{{ $cart[$cartKey]['jumlah'] }}"
+                                                min="1" max="{{ $product->stok_karton }}"
+                                                wire:change="setQty('{{ $cartKey }}', $event.target.value)"
+                                                onclick="this.select()" />
+                                            <button class="pos-card-stepper-btn"
+                                                wire:click="incrementQty('{{ $cartKey }}')">+</button>
+                                        </div>
+                                    @else
+                                        <button class="pos-card-atc-btn"
+                                            wire:click="addToCart({{ $product->id }})">
+                                            + Keranjang
+                                        </button>
+                                    @endif
                                 </div>
                             </div>
                         </div>
