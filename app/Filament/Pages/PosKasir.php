@@ -38,6 +38,16 @@ class PosKasir extends Page
     public string $namaPembeli       = '';
     public ?int   $gudangId          = null;
 
+    public function updatedNamaPembeli(): void
+    {
+        $this->resetErrorBag('namaPembeli');
+    }
+
+    public function updatedTotalBayar(): void
+    {
+        $this->resetErrorBag('totalBayar');
+    }
+
     public function mount(): void
     {
         $user = auth()->user();
@@ -221,24 +231,30 @@ class PosKasir extends Page
 
     public function prosesTransaksi(): void
     {
+        $hasError = false;
+
         if (empty($this->cart)) {
-            Notification::make()->title('Keranjang kosong!')->warning()->send();
-            return;
+            $this->addError('cart', 'Keranjang masih kosong, tambahkan produk terlebih dahulu.');
+            $hasError = true;
+        } else {
+            $this->resetErrorBag('cart');
         }
 
         if (empty(trim($this->namaPembeli))) {
-            Notification::make()->title('Nama pembeli wajib diisi!')->danger()->send();
-            return;
+            $this->addError('namaPembeli', 'Nama pembeli wajib diisi.');
+            $hasError = true;
+        } else {
+            $this->resetErrorBag('namaPembeli');
         }
 
         if ($this->bayarInt < $this->totalHarga) {
-            Notification::make()
-                ->title('Pembayaran kurang!')
-                ->body('Uang yang diterima kurang dari total harga.')
-                ->danger()
-                ->send();
-            return;
+            $this->addError('totalBayar', 'Uang diterima kurang dari total harga.');
+            $hasError = true;
+        } else {
+            $this->resetErrorBag('totalBayar');
         }
+
+        if ($hasError) return;
 
         // Validasi stok sebelum proses
         foreach ($this->cart as $item) {

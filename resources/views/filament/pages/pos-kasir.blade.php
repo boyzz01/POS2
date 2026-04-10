@@ -532,6 +532,16 @@
             color: var(--pos-text-muted);
         }
 
+        .pos-field-error {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--pos-danger);
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
         .pos-action-row {
             display: flex;
             gap: 8px;
@@ -1111,6 +1121,9 @@
                         @endforeach
                         <button wire:click="setExact" class="pos-quick-btn exact">Pas</button>
                     </div>
+                    @error('totalBayar')
+                        <p class="pos-field-error">⚠ {{ $message }}</p>
+                    @enderror
                 </div>
 
                 {{-- Change --}}
@@ -1135,13 +1148,19 @@
 
                 {{-- Nama Pembeli --}}
                 <input type="text" wire:model.live="namaPembeli" placeholder="Nama pembeli (wajib)..."
-                    class="pos-note-input" style="margin-bottom:6px;" required />
+                    class="pos-note-input" style="margin-bottom:4px;" required />
+                @error('namaPembeli')
+                    <p class="pos-field-error" style="margin-bottom:6px;">⚠ {{ $message }}</p>
+                @enderror
 
                 {{-- Notes --}}
                 <input type="text" wire:model.live="catatan" placeholder="Catatan transaksi (opsional)..."
                     class="pos-note-input" />
 
                 {{-- Actions --}}
+                @error('cart')
+                    <p class="pos-field-error" style="margin-bottom:6px;">⚠ {{ $message }}</p>
+                @enderror
                 <div class="pos-action-row">
                     <button wire:click="clearCart" class="pos-btn-clear">
                         <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1150,8 +1169,8 @@
                         </svg>
                     </button>
 
-                    <button wire:click="prosesTransaksi" wire:loading.attr="disabled" @disabled(empty($cart) || $this->bayarInt < $this->totalHarga)
-                        class="pos-btn-pay {{ !empty($cart) && $this->bayarInt >= $this->totalHarga ? 'active' : 'disabled' }}">
+                    <button wire:click="prosesTransaksi" wire:loading.attr="disabled"
+                        class="pos-btn-pay active">
                         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                 d="M5 13l4 4L19 7" />
