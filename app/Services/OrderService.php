@@ -140,7 +140,7 @@ class OrderService
 
     private function notifyAdmins(Order $order): void
     {
-        User::whereIn('role', ['super_admin', 'admin'])->each(
+        User::whereIn('role', ['super_admin', 'admin', 'kasir'])->each(
             fn (User $user) => $user->notify(new NewOrderAdminNotification($order))
         );
     }
