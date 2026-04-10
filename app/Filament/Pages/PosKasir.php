@@ -38,6 +38,11 @@ class PosKasir extends Page
     public string $namaPembeli       = '';
     public ?int   $gudangId          = null;
 
+    public function updatedGudangId(): void
+    {
+        $this->resetErrorBag('gudangId');
+    }
+
     public function updatedNamaPembeli(): void
     {
         $this->resetErrorBag('namaPembeli');
@@ -238,6 +243,14 @@ class PosKasir extends Page
             $hasError = true;
         } else {
             $this->resetErrorBag('cart');
+        }
+
+        $resolvedGudangId = $this->gudangId ?: auth()->user()?->gudang_id;
+        if (! $resolvedGudangId) {
+            $this->addError('gudangId', 'Pilih lokasi penjualan terlebih dahulu.');
+            $hasError = true;
+        } else {
+            $this->resetErrorBag('gudangId');
         }
 
         if (empty(trim($this->namaPembeli))) {

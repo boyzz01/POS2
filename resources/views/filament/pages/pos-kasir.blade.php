@@ -1019,12 +1019,15 @@
                     </div>
                 @else
                     <select wire:model.live="gudangId"
-                        style="width:100%; padding:8px 12px; border-radius:8px; border:1px solid var(--pos-border); background:var(--pos-surface); color:var(--pos-text); font-size:13px; font-weight:500; cursor:pointer;">
+                        style="width:100%; padding:8px 12px; border-radius:8px; border:2px solid {{ $errors->has('gudangId') ? 'var(--pos-danger)' : 'var(--pos-border)' }}; background:var(--pos-surface); color:var(--pos-text); font-size:13px; font-weight:500; cursor:pointer;">
                         <option value="">— Pilih Lokasi Penjualan —</option>
                         @foreach(\App\Models\Gudang::where('aktif', true)->orderByRaw("FIELD(tipe,'toko','gudang')")->get() as $g)
                             <option value="{{ $g->id }}">{{ $g->tipe === 'toko' ? '🏪' : '🏭' }} {{ $g->nama }}</option>
                         @endforeach
                     </select>
+                    @error('gudangId')
+                        <p class="pos-field-error" style="margin-top:5px;">⚠ {{ $message }}</p>
+                    @enderror
                 @endif
             </div>
 
