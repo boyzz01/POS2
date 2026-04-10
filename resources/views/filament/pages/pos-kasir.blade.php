@@ -328,6 +328,8 @@
             border-top: 1px solid var(--pos-border);
             padding: 16px;
             background: var(--pos-surface);
+            overflow-y: auto;
+            flex-shrink: 1;
         }
 
         .pos-summary-row {
@@ -1076,7 +1078,7 @@
             </div>
 
             {{-- Payment Panel --}}
-            <div class="pos-payment">
+            <div class="pos-payment pos-scroll">
 
                 {{-- Summary --}}
                 <div class="pos-summary-row">
