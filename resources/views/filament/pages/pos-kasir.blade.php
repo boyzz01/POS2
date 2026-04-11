@@ -1361,4 +1361,32 @@
     {{-- 
     @keyframes spin { to { transform: rotate(360deg); } } --}}
 
+{{-- Modal Resi --}}
+@if($this->showResi && $this->transaksiResi)
+<div
+    style="position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.5);"
+>
+    <div style="background:#fff;border-radius:12px;width:100%;max-width:420px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+        {{-- Modal Header --}}
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid #e5e7eb;">
+            <div style="font-size:15px;font-weight:700;color:#111827;">
+                Transaksi Berhasil
+            </div>
+            <button
+                wire:click="tutupResi"
+                style="background:none;border:none;cursor:pointer;color:#6b7280;padding:4px;"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+        {{-- Resi Content --}}
+        <div>
+            @include('filament.modals.resi', ['transaksi' => $this->transaksiResi])
+        </div>
+    </div>
+</div>
+@endif
+
 </x-filament-panels::page>

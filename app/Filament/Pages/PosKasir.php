@@ -37,6 +37,21 @@ class PosKasir extends Page
     public string $metodePembayaran  = 'transfer';
     public string $namaPembeli       = '';
     public ?int   $gudangId          = null;
+    public bool   $showResi          = false;
+    public ?int   $transaksiResiId   = null;
+
+    public function getTransaksiResiProperty(): ?Transaksi
+    {
+        if (! $this->transaksiResiId) return null;
+        return Transaksi::with(['kasir', 'gudang', 'items'])->find($this->transaksiResiId);
+    }
+
+    public function tutupResi(): void
+    {
+        $this->showResi = false;
+        $this->transaksiResiId = null;
+        $this->clearCart();
+    }
 
     public function updatedGudangId(): void
     {
@@ -307,13 +322,7 @@ class PosKasir extends Page
             ]);
         }
 
-        Notification::make()
-            ->title('Transaksi Berhasil!')
-            ->body('Kode: ' . $transaksi->kode_transaksi . ' | Kembalian: Rp ' . number_format($this->kembalian, 0, ',', '.'))
-            ->success()
-            ->duration(6000)
-            ->send();
-
-        $this->clearCart();
+        $this->transaksiResiId = $transaksi->id;
+        $this->showResi = true;
     }
 }
