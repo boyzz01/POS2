@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -r \"Tables\\\\\\\\Actions\\\\\\\\Action\\\\|Tables\\\\Actions\\\\Action\" vendor/filament --include=\"*.php\" -l)",
+      "Bash(icacls \"c:\\\\laragon\\\\www\\\\POS2\\\\storage\\\\framework\\\\views\" /grant Everyone:F /T)",
+      "Bash(cmd /c \"icacls \\\\\"c:\\\\laragon\\\\www\\\\POS2\\\\storage\\\\framework\\\\views\\\\\" /grant Everyone:F /T\")",
+      "Bash(find /c/laragon/www/POS2/app -type f -name \"*.php\" -exec grep -l \"resi\\\\|QrCode\\\\|simplesoftwareio\" {} \\\\;)",
+      "Bash(php -r \"require 'vendor/autoload.php'; echo class_exists\\('SimpleSoftwareIO\\\\QrCode\\\\QrCodeServiceProvider'\\) ? 'OK' : 'NOT FOUND';\")"
+    ]
+  }
+}

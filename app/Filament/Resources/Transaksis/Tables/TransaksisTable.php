@@ -2,10 +2,12 @@
 
 namespace App\Filament\Resources\Transaksis\Tables;
 
+use App\Models\Transaksi;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DatePicker;
+use Filament\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
@@ -112,6 +114,17 @@ class TransaksisTable
             ])
             ->recordActions([
                 ViewAction::make(),
+                Action::make('lihatResi')
+                    ->label('Lihat Resi')
+                    ->icon('heroicon-o-document-text')
+                    ->color('warning')
+                    ->modalContent(fn (Transaksi $record) => view(
+                        'filament.modals.resi',
+                        ['transaksi' => $record->load('items', 'kasir', 'gudang')]
+                    ))
+                    ->modalHeading(fn (Transaksi $record) => 'Resi — ' . $record->kode_transaksi)
+                    ->modalSubmitAction(false)
+                    ->modalCancelAction(fn ($action) => $action->label('Tutup')),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
