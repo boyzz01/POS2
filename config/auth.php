@@ -50,6 +50,12 @@ return [
             'driver'   => 'session',
             'provider' => 'customers',
         ],
+
+        // API guard — used by Android/mobile apps (Sanctum token-based)
+        'api' => [
+            'driver'   => 'sanctum',
+            'provider' => 'users',
+        ],
     ],
 
     /*
